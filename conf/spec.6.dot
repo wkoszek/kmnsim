@@ -1,0 +1,48 @@
+digraph network {
+	size="9,8";
+	"0x28208080" [
+		label="{Interfejs: h1:0 |IP: 192.168.1.1 |NM: 255.255.255.0 }"
+		shape=record
+	]
+	"0x28202080" [shape=box,label="Host: h1",style=filled,fillcolor=lightblue];
+	"0x28202080" -> "0x28208080";
+	"0x282080f0" [
+		label="{Interfejs: h2:0 |IP: 192.168.1.2 |NM: 255.255.255.0 }"
+		shape=record
+	]
+	"0x282020e0" [shape=box,label="Host: h2",style=filled,fillcolor=lightblue];
+	"0x282020e0" -> "0x282080f0";
+	"0x28208080" -> "0x282080f0";
+};
+digraph network {
+	size="9,8";
+	"0x28208080" [
+		label="{Interfejs: h1:0 |IP: 192.168.1.1 |NM: 255.255.255.0 }"
+		shape=record
+	]
+	"0x28202080" [shape=box,label="Host: h1",style=filled,fillcolor=lightblue];
+	"0x28202080" -> "0x28208080";
+	"0x282080f0" [
+		label="{Interfejs: h2:0 |IP: 192.168.1.2 |NM: 255.255.255.0 }"
+		shape=record
+	]
+	"0x282020e0" [shape=box,label="Host: h2",style=filled,fillcolor=lightblue];
+	"0x282020e0" -> "0x282080f0";
+	"0x28208080" -> "0x282080f0";
+};
+digraph network {
+	size="9,8";
+	"0x28208080" [
+		label="{Interfejs: h1:0 |IP: 192.168.1.1 |NM: 255.255.255.0 }"
+		shape=record
+	]
+	"0x28202080" [shape=box,label="Host: h1",style=filled,fillcolor=lightblue];
+	"0x28202080" -> "0x28208080";
+	"0x282080f0" [
+		label="{Interfejs: h2:0 |IP: 192.168.1.2 |NM: 255.255.255.0 }"
+		shape=record
+	]
+	"0x282020e0" [shape=box,label="Host: h2",style=filled,fillcolor=lightblue];
+	"0x282020e0" -> "0x282080f0";
+	"0x28208080" -> "0x282080f0";
+};

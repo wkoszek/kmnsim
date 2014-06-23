@@ -1,0 +1,54 @@
+#-------- NETWORK SIMULATION STARTED --------------
+
+Host h1:
+	Transmituje jeden pakiet z ID = 0 do ``Host'' o nazwie ``h2''
+Host h2:
+	Odbiera jeden pakiet z ID = 0;
+	Pakiet zostaje odebrany i wstawiony na miejsce 0 w kolejce odbiorczej
+		Odebrane dane ulegaj± przetwarzaniu.
+		Odebrano pakiet PING_REQUEST;
+		Wygenerowano odpowied¼ PING_ANSWER.
+Host h2:
+	Transmituje jeden pakiet z ID = 1 do ``Host'' o nazwie ``h1''
+Host h1:
+	Odbiera jeden pakiet z ID = 1;
+	Pakiet zostaje odebrany i wstawiony na miejsce 0 w kolejce odbiorczej
+		Odebrane dane ulegaj± przetwarzaniu.
+		Odebrano pakiet PING_ANSWER;
+		Test dostêpno¶ci hosta zakoñczony.
+#-------- NETWORK SIMULATION STARTED --------------
+
+Host h1:
+	Transmituje jeden pakiet z ID = 0 do ``Host'' o nazwie ``h2''
+Host h2:
+	Odbiera jeden pakiet z ID = 0;
+	Pakiet zostaje odebrany i wstawiony na miejsce 0 w kolejce odbiorczej
+		Odebrane dane ulegaj± przetwarzaniu.
+		Odebrano pakiet PING_REQUEST;
+		Wygenerowano odpowied¼ PING_ANSWER.
+Host h2:
+	Transmituje jeden pakiet z ID = 1 do ``Host'' o nazwie ``h1''
+Host h1:
+	Odbiera jeden pakiet z ID = 1;
+	Pakiet zostaje odebrany i wstawiony na miejsce 0 w kolejce odbiorczej
+		Odebrane dane ulegaj± przetwarzaniu.
+		Odebrano pakiet PING_ANSWER;
+		Test dostêpno¶ci hosta zakoñczony.
+#-------- NETWORK SIMULATION STARTED --------------
+
+Host h1:
+	Transmituje jeden pakiet z ID = 0 do ``Host'' o nazwie ``h2''
+Host h2:
+	Odbiera jeden pakiet z ID = 0;
+	Pakiet zostaje odebrany i wstawiony na miejsce 0 w kolejce odbiorczej
+		Odebrane dane ulegaj± przetwarzaniu.
+		Odebrano pakiet PING_REQUEST;
+		Wygenerowano odpowied¼ PING_ANSWER.
+Host h2:
+	Transmituje jeden pakiet z ID = 1 do ``Host'' o nazwie ``h1''
+Host h1:
+	Odbiera jeden pakiet z ID = 1;
+	Pakiet zostaje odebrany i wstawiony na miejsce 0 w kolejce odbiorczej
+		Odebrane dane ulegaj± przetwarzaniu.
+		Odebrano pakiet PING_ANSWER;
+		Test dostêpno¶ci hosta zakoñczony.

@@ -1,0 +1,103 @@
+This is pdfeTeXk, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=mex 2008.10.13)  16 JUN 2009 10:57
+entering extended mode
+ %&-line parsing enabled.
+ (/usr/local.old/share/texmf-dist/web2c/il2-pl.tcx)
+**KMNSIM-specyfikacja.tex
+(./KMNSIM-specyfikacja.tex
+This is MeX  Version 1.05  18 XII 1993  (B. Jackowski & M. Ry\'cko)
+(/usr/local.old/share/texmf-dist/tex/plain/dvips/colordvi.tex) [1]
+Underfull \hbox (badness 10000) in paragraph at lines 160--162
+
+
+\hbox(0.0+0.0)x469.75499
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 168--171
+
+
+\hbox(0.0+0.0)x469.75499
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 178--181
+
+
+\hbox(0.0+0.0)x469.75499
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 191--193
+
+
+\hbox(0.0+0.0)x469.75499
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 199--201
+
+
+\hbox(0.0+0.0)x469.75499
+.\glue(\rightskip) 0.0
+
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 210--212
+
+
+\hbox(0.0+0.0)x469.75499
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 218--220
+
+
+\hbox(0.0+0.0)x469.75499
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 233--236
+
+
+\hbox(0.0+0.0)x469.75499
+.\glue(\rightskip) 0.0
+
+
+Overfull \hbox (36.26865pt too wide) detected at line 256
+|  \tenrm Ustawia zmienn± NAZWA na warto¶æ WARTOSC |
+
+\hbox(8.5+3.5)x180.67499, glue set - 1.0
+.\rule(8.5+3.5)x0.0
+.\glue 0.0 plus 1.0fill
+.\glue 3.33333 plus 1.66666 minus 1.11111
+.\tenrm U
+.\tenrm s
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 256--257
+
+
+\hbox(0.0+0.0)x469.75499
+.\glue(\rightskip) 0.0
+
+
+Overfull \hbox (20.40874pt too wide) detected at line 261
+|  \tenrm Ustawia ilo¶æ kroków symulacji (domy¶lnie:10) |
+
+\hbox(8.5+3.5)x180.67499, glue set - 1.0
+.\rule(8.5+3.5)x0.0
+.\glue 0.0 plus 1.0fill
+.\glue 3.33333 plus 1.66666 minus 1.11111
+.\tenrm U
+.\tenrm s
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 261--262
+
+
+\hbox(0.0+0.0)x469.75499
+.\glue(\rightskip) 0.0
+
+[3] [4] )
+Output written on KMNSIM-specyfikacja.dvi (4 pages, 14104 bytes).

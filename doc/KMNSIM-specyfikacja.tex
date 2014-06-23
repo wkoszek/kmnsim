@@ -1,0 +1,300 @@
+%&mex --translate-file=il2-pl
+
+
+
+
+
+% Zaznaczyæ, ¿e "host ip" oraz "host ipv4" to to samo i ¿e to jest
+% rozszerzenie i przygotowanie do ipv6.
+
+% zastanowiæ siê nad pomys³em implementacji komendy "iface" ³±cz±cej
+% interfejsy urz±dzeñ.
+
+
+\input colordvi
+\nopagenumbers
+
+% Czcionki pomocnicze
+\font\tfont=plr10 scaled \magstep3
+\font\chfont=plb10 scaled \magstep2
+\font\subchfont=plb10 scaled \magstep1
+
+% Makro odpowiedzalne za rozdzia³
+\def\chap#1{\bigskip\noindent{\chfont #1}\smallskip}
+\def\subchap#1{\bigskip\noindent{\subchfont #1}\smallskip}
+\def\propchap#1{\bigskip\noindent{\subchfont #1}\smallskip}
+\def\mytt#1;#2.{
+\noindent\hfil\hbox to 2.5in{\strut\hfill#2\hfil}\hskip20pt{\tt #1}\hfill\break
+}
+
+% Nag³ówek
+\centerline{\tfont Koszek-Matyja Network Simulator}
+\medskip
+\centerline{\it Wojciech A. Koszek}
+\centerline{\tt wkoszek@FreeBSD.czest.pl}
+\smallskip
+\centerline{\it Piotr Matyja}
+\centerline{\tt piotr-matyja@o2.pl}
+\bigskip
+\bigskip
+
+% -- Tre¶æ --
+
+\chap{Wprowadzenie}
+\noindent
+G³ównym powodem do stworzenia programu {\tt KMNSIM} by³a chêæ wiarygodnego
+odtworzenia zachowania sieci {\tt Ethernet} w sposób wirtualny, bez
+konieczno¶ci faktycznej ingerencji w strukturê i konfiguracjê jakiejkolwiek
+fizycznej sieci.
+
+Dziêki programowej emulacji zachowania sieci Ethernet, mo¿liwe
+jest symulowanie po³±czeñ miêdzy komputerami-hostami, koncentratorami,
+prze³±cznikami oraz routerami.
+
+\smallskip
+\Red{2009-06-16: funkcjonalno¶æ dot. routerów nie jest jeszcze
+zaimplementowana}
+\smallskip
+
+\chap{Architektura symulatora}
+\noindent
+Symulator stworzony zosta³ w modu³owy sposób. Taka architektura niesie za
+sob± wiele zalet, od choæby ³atwej mo¿lwo¶ci testowania oprogramowania, a na
+rozszerzalno¶ci koñcz±c. W pocz±tkowej fazie projektowania problemem sta³a
+siê sama z³o¿ono¶æ mo¿liwej do zasymulowania sieci oraz ilo¶æ mo¿liwych do
+wykonania po³±czeñ.
+
+Naszym zdaniem niemo¿liwe by³oby dok³adne przetestowanie programu, gdyby
+zosta³ wykonany on w sposób typowy dla aplikacji z graficznym interfejsem
+u¿ytkownika. Zdecydowali¶my siê tote¿ na skorzystanie z architektury
+oprogramowania znanego z systemów rodziny {\tt UNIX}, gdzie g³ówn±
+funkcjonalno¶æ realizuje aplikacja tekstowa, uruchamiania w trybie
+wstadowym. Wynik dzia³ania programu zapisywany jest do plik (b±d¼ plików),
+których poprawno¶æ mo¿na ³atwo zweryfikowaæ. Na podstawie generowanego pliku
+interfejs graficzny, uruchamiany jako osobny, niezale¿ny program, jest w
+stanie zwizualizowaæ u¿ytkownikowi poszczególne kroki czasowe symulacji.
+
+\smallskip
+\Red{Natywny graficzny interfejs u¿ytkownika nie jest jeszcze
+zaimplementowany; istnieje jednak¿e mo¿liwo¶æ wykorzystania pakietu
+in¿ynierskiego Graphviz to podejrzenia w postaci graficznej plików DOT,
+które reprezentuj± graf po³±czeñ miêdzy elementami sieciowymi}.
+\smallskip
+
+\chap{Zasada dzia³ania}
+\noindent
+Sposób w jaki dzia³a program jest do¶æ prosty. U¿ytkownik tworzy opis sieci
+w pliku tekstowym przy pomocy zdefiniowanego jêzyka opisu sieci.  Jêzyk ten
+zastêpuje typowe, graficzne metody konfiguracji. Jest jednocze¶nie formatem
+s³u¿±cym do zachowywania struktury symulowanej sieci.
+
+Proces konfiguracji--tworzenia pliku wej¶ciowego--rozpoczynamy od
+specyfikacji wszystkich elementów sieci. Nastêpnie dokonujemy po³±czeñ
+miêdzy nimi w kontek¶cie spinania "wirtualnego" kabla. Poprawna konfiguracja
+poszczególnych urz±dzeñ oraz posiadania choæ jednego aktywnego po³±czenia
+umo¿liwiaj± rozpoczêcie procesu symulacji.
+
+Ka¿de urz±dzenie sieciowe do którego mo¿na siê pod³±czyæ (host, hub, switch,
+router) posiada pewn± ilo¶æ interfejsów. 
+
+Podstawow± jednostk± nadawania jest {\tt host}.  Posiada on mo¿liwo¶æ
+nadawania i odbioru danych z sieci, które skierowane zosta³y do niego.
+Minimaln± ilo¶ci± hostów nadaj±cych jest 1.  Host posiada jeden interfejs,
+który w celu aktywacji musi zostaæ skonfigurowany adresem fizycznym MAC,
+adresem IP oraz mask± sieciow±.
+
+Hub jest po¶rednikiem w wymianie pakietów miêdzy hostami/routerami.  Hub
+posiada pewn± z góry okre¶lon± ilo¶æ interfejsów. Owe interfejsy nie mog±
+ulec konfiguracji. S± one tylko przeka¼nikiem nap³ywaj±cych ramek.
+
+\smallskip
+\Red{Obecna implementacja zak³ada, ¿e zarówno hub jak i switch ma 8 portów; 
+Specyfikacja dowolnej ilo¶ci portów wymaga kosmetycznych zmian w kodzie
+symulatora.}
+\smallskip
+
+\noindent 
+Rola switcha jest analogiczna do roli huba, z jedyn± funkcjonaln± ró¿nic±,
+¿e zamiast przekazywaæ odebrany pakiet na wszystkie porty, switch dokonuje
+routingu w warstwie drugiej przekazuj±c pakiet tylko na port, z którego
+host/router docelowy bêd± w stanie odebraæ dane.
+
+Po³±czenie miêdzy dwoma urz±dzeniami mo¿liwe jest po specyfikacji 4
+parametrów: nazwy i numeru interfejsu miejsca ¼ród³owego po³±czenia oraz
+nazwy i numeru interfejsu miejsca przeznaczenia.
+
+Na tym etapie proces tworzenia pliku konfiguracyjnego jest ukoñczony.
+
+Program interpretuje ów plik oraz sprawdza jego poprawno¶æ. W przypadku
+b³êdnej sk³adni pliku konfiguracyjnego, program przerywa dzia³anie oraz
+informuje u¿ytkownika o pope³nionych b³êdach. W przeciwnym razie program
+rozpoczyna symulacjê. Symulacja polega na wykonaniu wyspecyfikowanej przez
+u¿ytkonika ilo¶ci kroków, po którym nast±pi koniec symulacji.
+
+Ostateczn± faz± dzia³ania jest wypisanie wyników symulacji na ekran. Program
+wspiera kilka formatów wyj¶ciowych -- wcze¶niej wspomniany format Dot
+pakietu Graphviz, format tekstowy u¿yteczny do obserwacji faktycznej
+{\bf~implementacji} symulatora lub, najbardziej u¿yteczny, plik tekstowy
+obrazuj±cy zachowanie sieci w poszczególnych krokach symulacji.
+
+
+% Host.
+\chap{Opis jêzyka konfiguracyjnego: {\tt host}}
+\noindent
+Pierwszym elementem potrzebnym do symulacji jest host.  Ka¿dy {\bf host}
+posiada kolejkê nadawczo-odbiorcz±. W przypadku wysy³ania danych umieszcza w
+buforze nadawczym dane dot. miejsca ¼ród³owego i przeznaczenia, po czym
+oznacza dane jako gotowe do wys³ania. Automatycznie wraz ze stworzeniem
+hosta {\tt NAZWA} stworzony zostanie interfejs o nazwie {\tt NAZWA} i
+numerze {\tt 0} (analogicznie do nazewnictwa interfejsów w wiêkszo¶ci
+systemów operacyjnych).
+
+\smallskip
+\Blue{
+Okre¶lenie miejsca docelowego, a co za tym idzie, pó¼niejsza decyzja o
+akceptacji do przetwarzania pakietu dokonywana jest na bazie tre¶ci pakietu.
+}
+\smallskip
+
+\propchap{Proponowana sk³adnia dla dodawania hosta}
+\mytt host newhost1 create; Spowoduje dodanie hosta do sieci.
+\mytt host mojhost1 remove; Usuwa host z sieci.
+
+\chap{Opis jêzyka konfiguracyjnego: iface}
+\noindent
+Konfiguracja interfejsu mo¿e odbywaæ siê w przypadku, gdy dany interfejs
+nale¿y do hosta b±d¼ routera.
+
+\mytt iface NAZWA NUMER mac AA:BB:CC:DD:EE:FF; Konfiguruje ustawienia warstwy fizycznej.
+\mytt iface NAZWA NUMER ip IP; Konfiguruje adres IP hosta.
+\mytt iface NAZWA NUMER netmask NETMASK; Konfiguruje maskê sieciow± hosta.
+
+W przypadku hosta {\tt NUMER} musi byæ równy 0 -- host posiada tylko jeden
+interfejs. Z kolei w przypadku huba/switcha mo¿liwe jest wyspecyfikowanie
+innych interfejsów w obrêbie dostêpnych portów.  Przyk³adowo, dla hosta {\tt
+h1} mo¿liwymi komendami s±:
+
+\medskip
+\mytt iface h1 0 mac 11:22:33:44:55:66; Konfiguruje ustawienia warstwy fizycznej.
+\mytt iface h1 0 ip 192.168.1.1; Konfiguruje adres IP hosta.
+\mytt iface h1 0 netmask 255.255.255.0; Konfiguruje maskê sieciow± hosta.
+\medskip
+
+% Hub.
+\chap{Opis jêzyka konfiguracyjnego: hub}
+\noindent
+Pierwszym elementem styczno¶ci hosta z sieci± jest {\bf hub}. Hub jest
+urz±dzeniem, które posiada wiele portów Ethernet. Ruch odebrany na jednym z
+portów jest przekierowywany na wszystkie inne dostêpne porty.  W celu
+stworzenia huba w sieci korzystamy z polecenia:
+\medskip
+\mytt hub NAZWA create; Spowoduje dodanie huba do sieci.
+\mytt hub NAZWA remove; Usuwa huba z sieci.
+\medskip
+
+\noindent
+Na przyk³ad stworzenie hub'a {\tt hu1} mo¿liwe jest dziêki poleceniom:
+
+\medskip
+\mytt hub hu1 create; Spowoduje dodanie huba {\tt hu1} do sieci.
+\mytt hub hu1 remove; Usuwa huba {\tt hu1} z sieci.
+\medskip
+
+
+% Switch.
+\chap{Opis jêzyka konfiguracyjnego: switch}
+\noindent
+W celu stworzenia switcha w sieci korzystamy z polecenia:
+
+\medskip
+\mytt switch NAZWA create; Spowoduje dodanie huba do sieci.
+\mytt switch NAZWA remove; Usuwa huba z sieci.
+\medskip
+
+\noindent
+Stworzenie switchaa {\tt sw1} mo¿liwe jest dziêki poleceniom:
+
+\medskip
+\mytt switch sw1 create; Spowoduje dodanie switcha {\tt sw1} do sieci.
+\mytt switch sw1 remove; Usuwa switch {\tt sw1} z sieci.
+\medskip
+
+\chap{Opis jêzyka konfiguracyjnego: router}
+\noindent
+Router to host posiadaj±cy wiele interfejsów sieciowych o ró¿nych adresach
+IP. Router posiada równie¿ tablicê routingu czyli spis miejsc osi±galnych
+poprzez okre¶lony interfejs sieciowy.  Router posiada mo¿liwo¶æ
+przekierowania danych z jednego interfejsu do drugiego -- dzieje siê tak w
+przypadku, w którym miejsce przeznaczenia wys³anego z hosta pakietu znajduje
+siê w tablicy routingu routera.  Oznacza to, ¿e router wie, na który
+interfejs przekierowaæ pakiet i w³a¶nie to dokonuje.
+
+\propchap{Proponowana sk³adnia dla dodawania routera}
+\mytt router NAZWA create; Stworzenie routera.
+\mytt router NAZWA remove; Usuniêcie routera.
+\mytt router NAZWA route IP NETMASK NUMER-INTERFEJSU; Ustala trasê routingu.
+
+\smallskip
+\Red{
+Ta czê¶æ jest jeszcze niezaimplementowana.
+}
+\smallskip
+
+\noindent
+Aktywne elementy sieci, które posiadaj± mo¿liwo¶æ nadawania danych mog±
+posiadaæ przypisane do siebie zadanie. Zadanie s³u¿y do wymuszenia pewnego
+ustalonego ruchu danych w strukturze sieci i jest zasadnicz± w³a¶ciwo¶ci±
+pracy symulatora. Zadanie zostanie wykonane po rozpoczêciu symulacji.
+
+% Reszta.
+\chap{Jêzyk konfiguracyjny: pozosta³e po³±czenia}
+\noindent
+Na koniec pozosta³a nam najbardziej u¿yteczna grupa instrukcji, a mianowicie
+ta specyfikuj±ca poszczególne parametry dotycz±ce procesu symulacji. Zmiany
+parametrów mo¿emy dokonaæ poprzez:
+
+\mytt set NAZWA WARTOSC; Ustawia zmienn± NAZWA na warto¶æ WARTOSC.
+
+\noindent
+Zaimplementowana funkcjonalno¶æ to:
+
+\mytt set simtime ILE-KROKOW; Ustawia ilo¶æ kroków symulacji (domy¶lnie:10).
+
+\chap{Notki implementacyjne}
+\noindent
+Symulator zosta³ napisany w jêzyku ANSI C. Wybór na tê technologiê pad³ z
+powodu ³atwej dostêpno¶ci nag³ówków, implementuj±cych struktury pakietów
+sieci Ethernet oraz najlepsz± z dostêpnych dróg na zapewnienie modularno¶ci
+(biblioteki dzielone) naszego projektu.
+
+\Blue{
+Architektura symulatora w chwili obecnej u¿ywa uproszczonych nag³ówków
+Ethernet, IP oraz ICMP.
+Mo¿liwe jest jednak uzyskanie PE£NEJ zgodno¶ci ze struktur± rzeczywistych
+pakietów i wykorzystanie replik w symulatorze.
+}
+
+\Red{
+Faktem jest, ¿e symulator rzeczywi¶cie pracuje w kontek¶cie "wysy³ania",
+"odbierania", "analizy" i "przetwarzania" rzeczywistych pakietów. Wiadomo¶æ
+ICMP REQUEST jest faktyczn± porcj± danych docieraj±c± do interfejsu hosta,
+któr± ten musi przeanalizowaæ.
+}
+
+Plik nag³ówkowy {\tt queue.h} zosta³ zapo¿yczony z projektu FreeBSD i s³u¿y
+do wygodnego zarz±dzania strukturami danych (listy, kolejki) wykorzystanymi
+w projekcie.
+
+{\Red{Do gruntownego rozszerzenia!}}
+
+\chap{Zakoñczenie}
+\noindent ¯yczymy mi³ego u¿ytkowania i czekamy na uwagi.
+\bigskip
+\bigskip
+\rightline{Wojciech A. Koszek}
+\rightline{\tt wkoszek@FreeBSD.czest.pl}
+\smallskip
+\rightline{Piotr Matyja}
+\rightline{\tt piotr-matyja@o2.pl}
+
+\bye
