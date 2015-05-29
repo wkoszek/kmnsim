@@ -309,4 +309,17 @@ char *trim(char *s);
  */
 int streq(const char *a, const char *b);
 
+/*
+ * Some prototypes for Clang running on Travis (Linux in a Docker)
+ */
+#ifndef strlcat
+extern size_t strlcat(char *dst, const char *src, size_t size);
+#endif
+#ifndef strdup
+extern char *strdup(const char *s1);
+#endif
+#ifdef strsep
+extern char *strsep(char **stringp, const char *delim);
+#endif
+
 #endif /* _KMNSIM_H_ */
