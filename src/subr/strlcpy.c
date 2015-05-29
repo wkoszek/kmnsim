@@ -24,7 +24,7 @@ __FBSDID("$FreeBSD: src/lib/libc/string/strlcpy.c,v 1.11 2009/02/28 05:15:02 das
 #include <sys/types.h>
 #include <string.h>
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__linux__)
 /*
  * Copy src to string dst of size siz.  At most siz-1 characters
  * will be copied.  Always NUL terminates (unless siz == 0).

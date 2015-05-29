@@ -24,7 +24,7 @@ __FBSDID("$FreeBSD: src/lib/libc/string/strlcat.c,v 1.12 2009/02/28 05:15:02 das
 #include <sys/types.h>
 #include <string.h>
 
-#if _WIN32
+#if defined(_WIN32) || defined(__linux__)
 /*
  * Appends src to string dst of size siz (unlike strncat, siz is the
  * full size of dst, not space left).  At most siz-1 characters

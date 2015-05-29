@@ -12,6 +12,9 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <stdarg.h>
+#ifdef __linux__
+#include <getopt.h>
+#endif
 
 #include "queue.h"
 #include "kmnsim.h"
@@ -964,7 +967,7 @@ cmd_dispatch_hub(struct network *n, struct cmdlist *l, hub_mode_t mode)
 		error = hub_remove(n, hname);
 	}
 
-	return (0);
+	return (error);
 }
 
 /*
@@ -1006,7 +1009,7 @@ cmd_dispatch_router(struct network *n, struct cmdlist *l)
 		    "Unknown subcommand '%s' to the 'router' command", cmd_val(action)));
 	}
 
-	return (0);
+	return (error);
 }
 
 int
@@ -1413,7 +1416,6 @@ cmd_dispatch_iface(struct network *n, struct cmdlist *l)
 	struct cmd *action = NULL;
 	struct cmd *arg = NULL;
 	struct iface *ifp = NULL;
-	char *arg_str = NULL;
 	int inum = -2;
 	int error = 0;
 
@@ -1432,7 +1434,6 @@ cmd_dispatch_iface(struct network *n, struct cmdlist *l)
 	arg = cmdlist_first(l);
 	if (arg == NULL)
 		return (network_err(n, "Command 'iface' requires ``action argument'' parameter"));
-	arg_str = cmd_val(arg);
 
 	inum = atoi(cmd_val(ifnum));
 	nid = nid_lookup(&n->nids, cmd_val(name), inum, NID_IFACE);
