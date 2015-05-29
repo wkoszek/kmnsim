@@ -8,7 +8,7 @@ kmnsim:			\
 	strsep.o	\
 	strlcat.o	\
 	strlcpy.o
-	gcc -g -ggdb -o kmnsim	\
+	$(CC) -g -ggdb -o kmnsim	\
 	all.o		\
 	strdup.o	\
 	strsep.o	\
@@ -20,15 +20,15 @@ kmnsim:			\
 # on Windows. Thus, every file has _WIN32 #ifdef'ed.
 #
 all.o: all.c queue.h kmnsim.h Makefile
-	gcc ${CFLAGS} -o all.o all.c
+	$(CC) $(CFLAGS) -o all.o all.c
 strdup.o: subr/strdup.c
-	gcc ${CFLAGS} -o strdup.o subr/strdup.c
+	$(CC) $(CFLAGS) -o strdup.o subr/strdup.c
 strsep.o: subr/strsep.c
-	gcc ${CFLAGS} -o strsep.o subr/strsep.c
+	$(CC) $(CFLAGS) -o strsep.o subr/strsep.c
 strlcpy.o: subr/strlcpy.c
-	gcc ${CFLAGS} -o strlcpy.o subr/strlcpy.c
+	$(CC) $(CFLAGS) -o strlcpy.o subr/strlcpy.c
 strlcat.o: subr/strlcat.c
-	gcc ${CFLAGS} -o strlcat.o subr/strlcat.c
+	$(CC) $(CFLAGS) -o strlcat.o subr/strlcat.c
 
 t:
 	./kmnsim -a -dd -v ../conf/spec.1
