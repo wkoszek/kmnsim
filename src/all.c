@@ -1049,7 +1049,7 @@ conn_destroy(struct conn *conn)
 	IFACE_ASSERT(i1);
 	iface_flag_clear(i0, IFACE_FLAG_HASCONN);
 	iface_flag_clear(i1, IFACE_FLAG_HASCONN);
-	memset(conn, 0, sizeof(conn));
+	memset(conn, 0, sizeof(*conn));
 	free(conn);
 }
 
@@ -1863,7 +1863,7 @@ pkt_destroy(struct pkt *pkt)
 
 	memset(pkt->data, 0, pkt->len);
 	free(pkt->data);
-	memset(pkt, 0, sizeof(pkt));
+	memset(pkt, 0, sizeof(*pkt));
 	free(pkt);
 }
 
@@ -1899,7 +1899,7 @@ void
 arptable_destroy(struct arptable *at)
 {
 
-	memset(at, 0, sizeof(at));
+	memset(at, 0, sizeof(*at));
 	at = NULL;
 }
 
