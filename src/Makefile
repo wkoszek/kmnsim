@@ -1,4 +1,6 @@
 CFLAGS=-c -std=c99 -O0 -g -ggdb -Wall -pedantic -Wall
+# Remove after I translate the code from Polish
+CFLAGS+=-Wno-invalid-source-encoding
 
 kmnsim:			\
 	all.o		\
