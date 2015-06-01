@@ -30,6 +30,9 @@ strlcpy.o: subr/strlcpy.c
 strlcat.o: subr/strlcat.c
 	$(CC) $(CFLAGS) -o strlcat.o subr/strlcat.c
 
+analyze:
+	 scan-build -o /tmp/_.kmnsim make -j4
+
 t:
 	./kmnsim -a -dd -v ../conf/spec.1
 #	./kmnsim -a -dd -v ../conf/spec.5
