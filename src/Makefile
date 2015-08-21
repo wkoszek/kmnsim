@@ -2,6 +2,12 @@ CFLAGS=-c -std=c99 -O0 -g -ggdb -Wall -pedantic -Wall
 # Remove after I translate the code from Polish
 CFLAGS+=-Wno-invalid-source-encoding
 
+TEST_ALL:=$(wildcard ../conf/*.i)
+TEST_EXCLUDE=../conf/spec.02.i ../conf/spec.05.i
+TEST_INS:=$(filter-out $(TEST_EXCLUDE),$(TEST_ALL))
+TEST_OUTS:=$(TEST_INS:.i=.o)
+TEST_DOTS:=$(TEST_INS:.i=.o)
+
 kmnsim:			\
 	all.o		\
 	strdup.o	\
@@ -33,17 +39,17 @@ strlcat.o: subr/strlcat.c
 analyze:
 	 scan-build -o /tmp/_.kmnsim make -j4
 
-t:
-	./kmnsim -a -dd -v ../conf/spec.1
-#	./kmnsim -a -dd -v ../conf/spec.2
-	./kmnsim -a -dd -v ../conf/spec.3
-	./kmnsim -a -dd -v ../conf/spec.4
-#	./kmnsim -a -dd -v ../conf/spec.5
-	./kmnsim -a -dd -v ../conf/spec.6
-	./kmnsim -a -dd -v ../conf/spec.7
-	./kmnsim -a -dd -v ../conf/spec.8
-	./kmnsim -a -dd -v ../conf/spec.9
+td:
+	@echo all $(TEST_ALL)
+	@echo excluded $(TEST_EXCLUDE)
+	@echo ins $(TEST_INS)
+	@echo outs $(TEST_OUTS)
 
+t: kmnsim $(TEST_OUTS)
+
+%.o: %.i
+	./kmnsim -a -dd -v $<
 
 clean:
-	rm -rf kmnsim *.o
+	rm -rf kmnsim *.o ../conf/*.out ../conf/*.dot \
+		../conf/*.txt
