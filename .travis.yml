@@ -6,3 +6,12 @@ compiler:
 os:
         - linux
         - os
+addons:
+  apt:
+    packages:
+      - graphviz
+script:
+        - cd src
+        - make
+        - make test
+        - make jpg
