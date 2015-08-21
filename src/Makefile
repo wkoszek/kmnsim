@@ -35,13 +35,15 @@ analyze:
 
 t:
 	./kmnsim -a -dd -v ../conf/spec.1
+#	./kmnsim -a -dd -v ../conf/spec.2
+	./kmnsim -a -dd -v ../conf/spec.3
+	./kmnsim -a -dd -v ../conf/spec.4
 #	./kmnsim -a -dd -v ../conf/spec.5
 	./kmnsim -a -dd -v ../conf/spec.6
 	./kmnsim -a -dd -v ../conf/spec.7
 	./kmnsim -a -dd -v ../conf/spec.8
 	./kmnsim -a -dd -v ../conf/spec.9
-	./kmnsim -a -dd -v ../conf/spec.10
-	./kmnsim -a -dd -v ../conf/spec.11
+
 
 clean:
 	rm -rf kmnsim *.o
