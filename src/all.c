@@ -2211,7 +2211,7 @@ iface_debug(struct iface *ifp, FILE *fp)
 	fprintf(fp, "\t   Name: '%s'\n", name);
 	fprintf(fp, "\t Number: '%d'\n", id);
 	fprintf(fp, "\t Active:  %d\n", iface_is_active(ifp));
-	fprintf(fp, "\t  Flags: ");
+	fprintf(fp, "\t  Flags:");
 	if (iface_flag_has(ifp, IFACE_FLAG_HASIP))
 		fprintf(fp, " HASIP ");
 	if (iface_flag_has(ifp, IFACE_FLAG_HASMAC))
@@ -2237,7 +2237,7 @@ iface_debug(struct iface *ifp, FILE *fp)
 	fprintf(fp, "\n");
 
 	fprintf(fp, "      Input packet queue:\n");
-	fprintf(fp, "      ------------------ \n");
+	fprintf(fp, "      ------------------\n");
 	fprintf(fp, "                 Address: %p\n", (void *)&ifp->inq);
 	fprintf(fp, "                 Content:\n");
 	pktq_debug(&ifp->inq, fp);
