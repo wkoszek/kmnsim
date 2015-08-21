@@ -2639,7 +2639,7 @@ network_dump_dot(struct network *n, FILE *fp)
 		    conn->nid1->obj
 		);
 
-	fprintf(fp, "};\n");
+	fprintf(fp, "}\n");
 	return (0);
 }
 
