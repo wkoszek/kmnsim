@@ -59,4 +59,4 @@ jpeg: kmnsim $(TEST_JPGS)
 
 clean:
 	rm -rf kmnsim *.o ../conf/*.out ../conf/*.dot \
-		../conf/*.txt
+		../conf/*.txt ../conf/*.o ../conf/*.jpg
