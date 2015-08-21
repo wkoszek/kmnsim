@@ -6,6 +6,7 @@ TEST_ALL:=$(wildcard ../conf/*.i)
 TEST_EXCLUDE=../conf/spec.02.i ../conf/spec.05.i
 TEST_INS:=$(filter-out $(TEST_EXCLUDE),$(TEST_ALL))
 TEST_OUTS:=$(TEST_INS:.i=.o)
+TEST_DOTS:=$(TEST_INS:.i=.dot)
 TEST_JPGS:=$(TEST_INS:.i=.jpg)
 
 kmnsim:			\
@@ -46,13 +47,14 @@ testdebug:
 	@echo outs $(TEST_OUTS)
 
 test: kmnsim $(TEST_OUTS)
-jpeg: kmnsim $(TEST_JPGS)
+dot: kmnsim $(TEST_DOTS)
+jpg: kmnsim $(TEST_JPGS)
 
 %.o: %.i
-	./kmnsim -dd -v  -S $@ $<
+	./kmnsim -dd -v -S $@ $<
 
 %.dot: %.i
-	./kmnsim -dd -v  -D $@ $<
+	./kmnsim -dd -v -D $@ $<
 
 %.jpg: %.dot
 	dot -Tjpg -o $@ $<
