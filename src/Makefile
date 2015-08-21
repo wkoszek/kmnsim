@@ -6,7 +6,7 @@ TEST_ALL:=$(wildcard ../conf/*.i)
 TEST_EXCLUDE=../conf/spec.02.i ../conf/spec.05.i
 TEST_INS:=$(filter-out $(TEST_EXCLUDE),$(TEST_ALL))
 TEST_OUTS:=$(TEST_INS:.i=.o)
-TEST_DOTS:=$(TEST_INS:.i=.o)
+TEST_JPGS:=$(TEST_INS:.i=.jpg)
 
 kmnsim:			\
 	all.o		\
@@ -39,16 +39,23 @@ strlcat.o: subr/strlcat.c
 analyze:
 	 scan-build -o /tmp/_.kmnsim make -j4
 
-td:
+testdebug:
 	@echo all $(TEST_ALL)
 	@echo excluded $(TEST_EXCLUDE)
 	@echo ins $(TEST_INS)
 	@echo outs $(TEST_OUTS)
 
-t: kmnsim $(TEST_OUTS)
+test: kmnsim $(TEST_OUTS)
+jpeg: kmnsim $(TEST_JPGS)
 
 %.o: %.i
-	./kmnsim -a -dd -v $<
+	./kmnsim -dd -v  -S $@ $<
+
+%.dot: %.i
+	./kmnsim -dd -v  -D $@ $<
+
+%.jpg: %.dot
+	dot -Tjpg -o $@ $<
 
 clean:
 	rm -rf kmnsim *.o ../conf/*.out ../conf/*.dot \
