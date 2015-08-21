@@ -2504,7 +2504,7 @@ network_summarize(struct network *n, const char *spec_file,
 	summary = NULL;
 	if (ofile_summary != NULL) {
 		DEBUG_STR(ofile_summary);
-		summary = fopen(ofile_summary, "a+");
+		summary = fopen(ofile_summary, "w");
 		if (summary == NULL) {
 			fprintf(stderr, "Couldn't open '%s' file for writing", ofile_summary);
 			return (-1);
@@ -2514,7 +2514,7 @@ network_summarize(struct network *n, const char *spec_file,
 	txt = NULL;
 	if (ofile_txt != NULL) {
 		DEBUG_STR(ofile_txt);
-		txt = fopen(ofile_txt, "a+");
+		txt = fopen(ofile_txt, "w");
 		if (txt == NULL) {
 			fprintf(stderr, "Couldn't open '%s' file for writing", ofile_txt);
 			return (-1);
@@ -2524,7 +2524,7 @@ network_summarize(struct network *n, const char *spec_file,
 	dot = NULL;
 	if (ofile_dot != NULL) {
 		DEBUG_STR(ofile_dot);
-		dot = fopen(ofile_dot, "a+");
+		dot = fopen(ofile_dot, "w");
 		if (dot == NULL) {
 			fprintf(stderr, "Couldn't open '%s' file for writing", ofile_dot);
 			return (-1);
