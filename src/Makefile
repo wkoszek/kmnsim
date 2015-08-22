@@ -50,6 +50,9 @@ test: kmnsim $(TEST_OUTS)
 dot: kmnsim $(TEST_DOTS)
 jpg: kmnsim $(TEST_JPGS)
 
+all: test dot jpg
+	
+
 %.o: %.i
 	./kmnsim -d -v -S $@ $<
 
