@@ -7,23 +7,6 @@ extern int flag_debug;
 extern int kmnsim_version;
 extern int verbose;
 
-#define ASSERT assert
-#define VERBOSE(x)		\
-	if ((x) >= verbose && (verbose >= 1))
-#define DEBUG(...)					\
-	if (flag_debug > 0) {					\
-	    	printf("%s(%d)\n", __func__, __LINE__);	\
-		printf(__VA_ARGS__);			\
-		printf("\n");				\
-	}
-#define	TBD()	DEBUG("_to_be_done_")
-#define DEBUG_STR(x)			\
-	printf("%s(%d): '%s' = '%s'\n",	\
-	    __func__, __LINE__,		\
-	    #x,				\
-	    (x)				\
-	)
-
 #define VERSION 1
 
 struct network;

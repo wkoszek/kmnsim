@@ -25,6 +25,22 @@
 #define EX_USAGE	64
 #endif
 
+#define ASSERT assert
+#define VERBOSE(x)		\
+	if ((x) >= verbose && (verbose >= 1))
+#define DEBUG(...)					\
+	if (flag_debug > 0) {				\
+		printf("%s(%d)\n", __func__, __LINE__);	\
+		printf(__VA_ARGS__);			\
+		printf("\n");				\
+	}
+#define	TBD()	DEBUG("_to_be_done_")
+#define DEBUG_STR(x)			\
+	printf("%s(%d): '%s' = '%s'\n",	\
+	    __func__, __LINE__,		\
+	    #x,				\
+	    (x)				\
+	)
 
 /* API dla komend - generalnie */
 int cmd_parse(struct cmdlist **cmdlist, int *cmd_num, const char *cmdstring);
