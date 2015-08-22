@@ -51,10 +51,10 @@ dot: kmnsim $(TEST_DOTS)
 jpg: kmnsim $(TEST_JPGS)
 
 %.o: %.i
-	./kmnsim -dd -v -S $@ $<
+	./kmnsim -d -v -S $@ $<
 
 %.dot: %.i
-	./kmnsim -dd -v -D $@ $<
+	./kmnsim -d -v -D $@ $<
 
 %.jpg: %.dot
 	dot -Tjpg -o $@ $<
