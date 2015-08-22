@@ -12,6 +12,4 @@ addons:
       - graphviz
 script:
         - cd src
-        - make
-        - make test
-        - make jpg
+        - make all
