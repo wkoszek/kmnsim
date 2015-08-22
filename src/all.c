@@ -27,7 +27,7 @@
 
 #define ASSERT assert
 #define VERBOSE(x)		\
-	if ((x) >= verbose && (verbose >= 1))
+	if (verbose && (verbose >= x))
 #define DEBUG(...)					\
 	if (flag_debug > 0) {				\
 		printf("%s(%d)\n", __func__, __LINE__);	\
