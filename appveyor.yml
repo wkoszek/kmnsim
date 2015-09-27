@@ -5,5 +5,5 @@ init:
 build_script:
 - cd src
 - make
-#on_finish:
+on_finish:
 - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
