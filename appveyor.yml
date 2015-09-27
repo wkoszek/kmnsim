@@ -3,7 +3,9 @@ init:
 #before_build:
 #- gettools.bat
 build_script:
+- SET PATH=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin;%PATH%
+- ECHO Running NMAKE
 - cd src
-- make
+- nmake
 on_finish:
 - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
