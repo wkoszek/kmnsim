@@ -3,9 +3,11 @@ init:
 #before_build:
 #- gettools.bat
 build_script:
+- SET PATH=C:\Qt\5.5\mingw492_32\bin;%PATH%
+- SET PATH=C:\Qt\Tools\mingw492_32\bin;%PATH%
 - SET PATH=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin;%PATH%
 - ECHO Running NMAKE
 - cd src
-- nmake
+- make
 on_finish:
 - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
