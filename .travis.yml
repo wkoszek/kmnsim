@@ -10,6 +10,8 @@ addons:
   apt:
     packages:
       - graphviz
+before_script:
+- [ "$TRAVIS_OS_NAME" = "osx" ] && brew install graphviz
 script:
 - cd src
 - make all
