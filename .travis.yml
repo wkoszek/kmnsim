@@ -1,15 +1,15 @@
 script: cd src && make
 language: c
 compiler:
-        - clang
-        - gcc
+- clang
+- gcc
 os:
-        - linux
-        - os
+- linux
+- os
 addons:
   apt:
     packages:
       - graphviz
 script:
-        - cd src
-        - make all
+- cd src
+- make all
