@@ -13,7 +13,9 @@ addons:
 before_script:
 - printenv
 - echo "executing before_script"
-- [ "$TRAVIS_OS_NAME" = "osx" ] && brew install graphviz
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install graphviz; fi
+
 script:
 - cd src
 - make all
