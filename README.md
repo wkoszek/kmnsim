@@ -89,3 +89,8 @@ c. Lines (8--10) are like (b), but for host `h2`
 d. Line (12) creates hub called `buh1`
 e. Line (14) uses `connect` directive to connect hub's `buh1` interface `0` with host's `h1` interface 0.
 f. Line (15) is like line (14), but for host `h2`
+
+# Author
+
+- Wojciech Adam Koszek, [wojciech@koszek.com](mailto:wojciech@koszek.com)
+- [http://www.koszek.com](http://www.koszek.com)
