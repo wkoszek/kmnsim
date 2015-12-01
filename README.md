@@ -11,7 +11,7 @@ interfaces, switches/hubs and their interfaces too. It then creates
 connections between those.
 
 Based on what has been requested in the configuration file, you can then
-`ping` the a host from another one and observe the network activity spage by
+`ping` the a host from another one and observe the network activity stage by
 stage.
 
 Flow of data is documented in the "report file". Except from report file,
