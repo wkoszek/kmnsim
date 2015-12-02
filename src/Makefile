@@ -1,4 +1,13 @@
 CFLAGS=-c -std=c99 -O0 -g -ggdb -Wall -pedantic -Wall
+# Remove after I translate the code from Polish
+CFLAGS+=-Wno-invalid-source-encoding
+
+TEST_ALL:=$(wildcard ../conf/*.i)
+TEST_EXCLUDE=../conf/spec.02.i ../conf/spec.05.i
+TEST_INS:=$(filter-out $(TEST_EXCLUDE),$(TEST_ALL))
+TEST_OUTS:=$(TEST_INS:.i=.o)
+TEST_DOTS:=$(TEST_INS:.i=.dot)
+TEST_JPGS:=$(TEST_INS:.i=.jpg)
 
 kmnsim:			\
 	all.o		\
@@ -6,7 +15,7 @@ kmnsim:			\
 	strsep.o	\
 	strlcat.o	\
 	strlcpy.o
-	gcc -g -ggdb -o kmnsim	\
+	$(CC) -g -ggdb -o kmnsim	\
 	all.o		\
 	strdup.o	\
 	strsep.o	\
@@ -18,25 +27,41 @@ kmnsim:			\
 # on Windows. Thus, every file has _WIN32 #ifdef'ed.
 #
 all.o: all.c queue.h kmnsim.h Makefile
-	gcc ${CFLAGS} -o all.o all.c
+	$(CC) $(CFLAGS) -o all.o all.c
 strdup.o: subr/strdup.c
-	gcc ${CFLAGS} -o strdup.o subr/strdup.c
+	$(CC) $(CFLAGS) -o strdup.o subr/strdup.c
 strsep.o: subr/strsep.c
-	gcc ${CFLAGS} -o strsep.o subr/strsep.c
+	$(CC) $(CFLAGS) -o strsep.o subr/strsep.c
 strlcpy.o: subr/strlcpy.c
-	gcc ${CFLAGS} -o strlcpy.o subr/strlcpy.c
+	$(CC) $(CFLAGS) -o strlcpy.o subr/strlcpy.c
 strlcat.o: subr/strlcat.c
-	gcc ${CFLAGS} -o strlcat.o subr/strlcat.c
+	$(CC) $(CFLAGS) -o strlcat.o subr/strlcat.c
 
-t:
-	./kmnsim -a -dd -v ../conf/spec.1
-#	./kmnsim -a -dd -v ../conf/spec.5
-	./kmnsim -a -dd -v ../conf/spec.6
-	./kmnsim -a -dd -v ../conf/spec.7
-	./kmnsim -a -dd -v ../conf/spec.8
-	./kmnsim -a -dd -v ../conf/spec.9
-	./kmnsim -a -dd -v ../conf/spec.10
-	./kmnsim -a -dd -v ../conf/spec.11
+analyze:
+	 scan-build -o /tmp/_.kmnsim make -j4
+
+testdebug:
+	@echo all $(TEST_ALL)
+	@echo excluded $(TEST_EXCLUDE)
+	@echo ins $(TEST_INS)
+	@echo outs $(TEST_OUTS)
+
+test: kmnsim $(TEST_OUTS)
+dot: kmnsim $(TEST_DOTS)
+jpg: kmnsim $(TEST_JPGS)
+
+all: test dot jpg
+	
+
+%.o: %.i
+	./kmnsim -d -v -S $@ $<
+
+%.dot: %.i
+	./kmnsim -d -v -D $@ $<
+
+%.jpg: %.dot
+	dot -Tjpg -o $@ $<
 
 clean:
-	rm -rf kmnsim *.o
+	rm -rf kmnsim *.o ../conf/*.out ../conf/*.dot \
+		../conf/*.txt ../conf/*.o ../conf/*.jpg

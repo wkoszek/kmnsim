@@ -7,10 +7,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include <assert.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <stdarg.h>
+#ifdef __linux__
+#include <getopt.h>
+#endif
 
 #include "queue.h"
 #include "kmnsim.h"
@@ -21,6 +25,22 @@
 #define EX_USAGE	64
 #endif
 
+#define ASSERT assert
+#define VERBOSE(x)		\
+	if (verbose && (verbose >= x))
+#define DEBUG(...)					\
+	if (flag_debug > 0) {				\
+		printf("%s(%d)\n", __func__, __LINE__);	\
+		printf(__VA_ARGS__);			\
+		printf("\n");				\
+	}
+#define	TBD()	DEBUG("_to_be_done_")
+#define DEBUG_STR(x)			\
+	printf("%s(%d): '%s' = '%s'\n",	\
+	    __func__, __LINE__,		\
+	    #x,				\
+	    (x)				\
+	)
 
 /* API dla komend - generalnie */
 int cmd_parse(struct cmdlist **cmdlist, int *cmd_num, const char *cmdstring);
@@ -963,7 +983,7 @@ cmd_dispatch_hub(struct network *n, struct cmdlist *l, hub_mode_t mode)
 		error = hub_remove(n, hname);
 	}
 
-	return (0);
+	return (error);
 }
 
 /*
@@ -1005,7 +1025,7 @@ cmd_dispatch_router(struct network *n, struct cmdlist *l)
 		    "Unknown subcommand '%s' to the 'router' command", cmd_val(action)));
 	}
 
-	return (0);
+	return (error);
 }
 
 int
@@ -1049,7 +1069,7 @@ conn_destroy(struct conn *conn)
 	IFACE_ASSERT(i1);
 	iface_flag_clear(i0, IFACE_FLAG_HASCONN);
 	iface_flag_clear(i1, IFACE_FLAG_HASCONN);
-	memset(conn, 0, sizeof(conn));
+	memset(conn, 0, sizeof(*conn));
 	free(conn);
 }
 
@@ -1412,7 +1432,6 @@ cmd_dispatch_iface(struct network *n, struct cmdlist *l)
 	struct cmd *action = NULL;
 	struct cmd *arg = NULL;
 	struct iface *ifp = NULL;
-	char *arg_str = NULL;
 	int inum = -2;
 	int error = 0;
 
@@ -1431,7 +1450,6 @@ cmd_dispatch_iface(struct network *n, struct cmdlist *l)
 	arg = cmdlist_first(l);
 	if (arg == NULL)
 		return (network_err(n, "Command 'iface' requires ``action argument'' parameter"));
-	arg_str = cmd_val(arg);
 
 	inum = atoi(cmd_val(ifnum));
 	nid = nid_lookup(&n->nids, cmd_val(name), inum, NID_IFACE);
@@ -1863,7 +1881,7 @@ pkt_destroy(struct pkt *pkt)
 
 	memset(pkt->data, 0, pkt->len);
 	free(pkt->data);
-	memset(pkt, 0, sizeof(pkt));
+	memset(pkt, 0, sizeof(*pkt));
 	free(pkt);
 }
 
@@ -1899,7 +1917,7 @@ void
 arptable_destroy(struct arptable *at)
 {
 
-	memset(at, 0, sizeof(at));
+	memset(at, 0, sizeof(*at));
 	at = NULL;
 }
 
@@ -2209,7 +2227,7 @@ iface_debug(struct iface *ifp, FILE *fp)
 	fprintf(fp, "\t   Name: '%s'\n", name);
 	fprintf(fp, "\t Number: '%d'\n", id);
 	fprintf(fp, "\t Active:  %d\n", iface_is_active(ifp));
-	fprintf(fp, "\t  Flags: ");
+	fprintf(fp, "\t  Flags:");
 	if (iface_flag_has(ifp, IFACE_FLAG_HASIP))
 		fprintf(fp, " HASIP ");
 	if (iface_flag_has(ifp, IFACE_FLAG_HASMAC))
@@ -2235,7 +2253,7 @@ iface_debug(struct iface *ifp, FILE *fp)
 	fprintf(fp, "\n");
 
 	fprintf(fp, "      Input packet queue:\n");
-	fprintf(fp, "      ------------------ \n");
+	fprintf(fp, "      ------------------\n");
 	fprintf(fp, "                 Address: %p\n", (void *)&ifp->inq);
 	fprintf(fp, "                 Content:\n");
 	pktq_debug(&ifp->inq, fp);
@@ -2502,7 +2520,7 @@ network_summarize(struct network *n, const char *spec_file,
 	summary = NULL;
 	if (ofile_summary != NULL) {
 		DEBUG_STR(ofile_summary);
-		summary = fopen(ofile_summary, "a+");
+		summary = fopen(ofile_summary, "w");
 		if (summary == NULL) {
 			fprintf(stderr, "Couldn't open '%s' file for writing", ofile_summary);
 			return (-1);
@@ -2512,7 +2530,7 @@ network_summarize(struct network *n, const char *spec_file,
 	txt = NULL;
 	if (ofile_txt != NULL) {
 		DEBUG_STR(ofile_txt);
-		txt = fopen(ofile_txt, "a+");
+		txt = fopen(ofile_txt, "w");
 		if (txt == NULL) {
 			fprintf(stderr, "Couldn't open '%s' file for writing", ofile_txt);
 			return (-1);
@@ -2522,7 +2540,7 @@ network_summarize(struct network *n, const char *spec_file,
 	dot = NULL;
 	if (ofile_dot != NULL) {
 		DEBUG_STR(ofile_dot);
-		dot = fopen(ofile_dot, "a+");
+		dot = fopen(ofile_dot, "w");
 		if (dot == NULL) {
 			fprintf(stderr, "Couldn't open '%s' file for writing", ofile_dot);
 			return (-1);
@@ -2637,7 +2655,7 @@ network_dump_dot(struct network *n, FILE *fp)
 		    conn->nid1->obj
 		);
 
-	fprintf(fp, "};\n");
+	fprintf(fp, "}\n");
 	return (0);
 }
 

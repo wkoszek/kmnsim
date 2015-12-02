@@ -38,7 +38,7 @@ __FBSDID("$FreeBSD: src/lib/libc/string/strsep.c,v 1.7 2009/02/03 17:58:20 dange
 #include <string.h>
 #include <stdio.h>
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__linux__)
 /*
  * Get next token from string *stringp, where tokens are possibly-empty
  * strings separated by characters from delim.

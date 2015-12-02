@@ -1,7 +1,7 @@
 #ifndef _SUBR_H_
 #define _SUBR_H_
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__linux__)
 char *strdup(const char *str);
 size_t strlcat(char * __restrict dst, const char * __restrict src, size_t siz);
 size_t strlcpy(char * __restrict dst, const char * __restrict src, size_t siz);

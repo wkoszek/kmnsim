@@ -1,0 +1,21 @@
+script: cd src && make
+language: c
+compiler:
+- clang
+- gcc
+os:
+- linux
+- osx
+addons:
+  apt:
+    packages:
+      - graphviz
+before_script:
+- printenv
+- echo "executing before_script"
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install graphviz; fi
+
+script:
+- cd src
+- make all
