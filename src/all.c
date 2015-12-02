@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2009 Wojciech Koszek <wkoszek@FreeBSD.czest.pl>
- *                       Piotr Matyja <piotr-matyja@o2.pl>
+ *                       Piotr Matyja <peter.matyja@gmail.com>
  *
  * All rights reserved.
  */
@@ -50,7 +50,7 @@ void cmdlist_show(struct cmdlist *cmdlist);
 struct cmd *cmdlist_first(struct cmdlist *l);
 char *cmd_val(struct cmd *c);
 
-/* API dla poszczególnych komend symulatora */
+/* API dla poszczegÃ³lnych komend symulatora */
 int cmd_dispatch(struct network *n, struct cmdlist *l);
 int cmd_dispatch_set(struct network *n, struct cmdlist *l);
 int cmd_dispatch_connect(struct network *n, struct cmdlist *l);
@@ -117,7 +117,7 @@ int network_err_msg(struct network *n);
 static int network_dump_txt(struct network *n, FILE *fp);
 static int network_dump_dot(struct network *n, FILE *fp);
 
-/* API PKTQ -- kolejka pakietów */
+/* API PKTQ -- kolejka pakietÃ³w */
 int pktq_empty(struct pktq *pktq);
 void pktq_destroy(struct pktq *pktq);
 void pktq_enqueue(struct pktq *pktq, struct pkt *pkt);
@@ -140,14 +140,14 @@ int addrv4_eq(unsigned int a0[ADDRV4_LEN], unsigned int a1[ADDRV4_LEN]);
 int host_rx_process(struct host *host);
 char *strdupf(const char *fmt, ...);
 
-/* API ARP: nieu¿ywane na razie */
+/* API ARP: nieuÂ¿ywane na razie */
 void arptable_init(struct arptable *at);
 void arptable_destroy(struct arptable *at);
 
 /*
- * Struktura msg trzyma jedn± liniê komunikatu w przebiegu czasowym
+ * Struktura msg trzyma jednÂ± liniÃª komunikatu w przebiegu czasowym
  * symulatora. W przypadku wyprowadzania w formacie txt/DOT, te dane nie
- * s± wykorzystywane.
+ * sÂ± wykorzystywane.
  */
 struct msg {
 	char buf[512];
@@ -158,7 +158,7 @@ static int msg_num = 0;
 struct msg nw_log[MSG_LOG_NUM];
 
 /*
- * Inicjalizacja tablicy komunikatów..
+ * Inicjalizacja tablicy komunikatÃ³w..
  */
 void
 msg_init(void)
@@ -184,12 +184,12 @@ msg_log(const char *fmt, ...)
 	struct msg *msg;
 
 	/*
-	 * Sprawd¼, czy aby nie jeste¶my w z³ym miejscu w kolejce
-	 * komunikatów.
+	 * SprawdÂ¼, czy aby nie jesteÂ¶my w zÂ³ym miejscu w kolejce
+	 * komunikatÃ³w.
 	 */
-	ASSERT(msg_num >= 0 && "msg_num jest za ma³e");
+	ASSERT(msg_num >= 0 && "msg_num jest za maÂ³e");
 	ASSERT(msg_num <= MSG_LOG_NUM &&
-	    "zwiêksz ilo¶æ slotów do logowania");
+	    "zwiÃªksz iloÂ¶Ã¦ slotÃ³w do logowania");
 	msg = &nw_log[msg_num];
 	msg_num++;
 
@@ -220,7 +220,7 @@ int kmnsim_version = VERSION;
 int verbose = 0;
 
 /*
- * Rozdzielacz metod w zale¿no¶ci od typu elemenentu aktywnego sieci.
+ * Rozdzielacz metod w zaleÂ¿noÂ¶ci od typu elemenentu aktywnego sieci.
  */
 struct conn_dispatcher {
 	int (*allow)(struct iface *iface, struct pkt *pkt);
@@ -230,8 +230,8 @@ struct conn_dispatcher {
 
 /*
  * Akceptor huba. Zawsze dopuszcza odebranie pakietu, bo to hub. Ta
- * czê¶æ powinna w zasadzie ulec zmianie, gdy¿ w przypadku switcha to
- * zachowanie mo¿e byæ odmienne.
+ * czÃªÂ¶Ã¦ powinna w zasadzie ulec zmianie, gdyÂ¿ w przypadku switcha to
+ * zachowanie moÂ¿e byÃ¦ odmienne.
  */
 int
 hub_allow(struct iface *iface, struct pkt *pkt)
@@ -245,7 +245,7 @@ hub_allow(struct iface *iface, struct pkt *pkt)
 }
 
 /*
- * Odbiera dane w kontek¶cie huba
+ * Odbiera dane w kontekÂ¶cie huba
  */
 int
 hub_rx(struct iface *iface, struct pkt *pkt)
@@ -255,14 +255,14 @@ hub_rx(struct iface *iface, struct pkt *pkt)
 	int pos = 0;
 	int i = 0;
 
-	/* Sprawd¼, czy interfejs jest ok */
+	/* SprawdÂ¼, czy interfejs jest ok */
 	IFACE_ASSERT(iface);
 	hub = iface->nid_owner->obj;
 	HUB_ASSERT(hub);
 	PKT_ASSERT(pkt);
 
 	/*
-	 * Zaloguj nasze postêpowanie.
+	 * Zaloguj nasze postÃªpowanie.
 	 */
 	msg_log("%s %s:", nid_type_desc(hub->nid), nid_name_get(hub->nid));
 	msg_log("\tOdbiera jeden pakiet z ID = %d", pkt->id);
@@ -280,7 +280,7 @@ hub_rx(struct iface *iface, struct pkt *pkt)
 	pktq_enqueue(&iface->inq, pkt);
 
 	/* 
-	 * Przetwórz wszystkie kolejki wyj¶ciowe huba.
+	 * PrzetwÃ³rz wszystkie kolejki wyjÂ¶ciowe huba.
 	 */
 	do {
 		i = hub_rx_process(hub);
@@ -290,7 +290,7 @@ hub_rx(struct iface *iface, struct pkt *pkt)
 }
 
 /*
- * Odbierz dane w kontek¶cie huba.
+ * Odbierz dane w kontekÂ¶cie huba.
  */
 struct pkt *
 hub_tx(struct iface *iface)
@@ -303,7 +303,7 @@ hub_tx(struct iface *iface)
 	HUB_ASSERT(hub);
 
 	pkt = pktq_dequeue(&iface->outq);
-	ASSERT(pkt != NULL && ("pkt nie mo¿e byæ NULL tutaj"));
+	ASSERT(pkt != NULL && ("pkt nie moÂ¿e byÃ¦ NULL tutaj"));
 
 	msg_log("%s %s:", nid_type_desc(hub->nid), nid_name_get(hub->nid));
 	msg_log("\tTransmituje jeden pakiet z ID = %d z interfejsu %d",
@@ -315,7 +315,7 @@ hub_tx(struct iface *iface)
 }
 
 /*
- * Przetwórz pierwszy dostêpny pakiet z kolejki wej¶ciowej.
+ * PrzetwÃ³rz pierwszy dostÃªpny pakiet z kolejki wejÂ¶ciowej.
  */
 int
 hub_rx_process(struct hub *hub)
@@ -330,7 +330,7 @@ hub_rx_process(struct hub *hub)
 	int outif_idx = 0;
 
 	/*
-	 * Pobierz pierwszy interfejs, w którym znajduj± siê
+	 * Pobierz pierwszy interfejs, w ktÃ³rym znajdujÂ± siÃª
 	 * jakiekolwiek dane.
 	 */
 	iface = NULL;
@@ -342,7 +342,7 @@ hub_rx_process(struct hub *hub)
 	}
 	if (iface == NULL)
 		/*
-		 * ¯aden interfejs huba nie ma danych w swoich kolejkach
+		 * Â¯aden interfejs huba nie ma danych w swoich kolejkach
 		 * nadawczych.
 		 */
 		return (-1);
@@ -352,22 +352,22 @@ hub_rx_process(struct hub *hub)
 	icmp = pkt->data;
 
 	/*
-	 * Teraz dokonujemy wyboru, na który interfejs/interfejsy
-	 * wys³aæ w³a¶nie co odebrane dane.
+	 * Teraz dokonujemy wyboru, na ktÃ³ry interfejs/interfejsy
+	 * wysÂ³aÃ¦ wÂ³aÂ¶nie co odebrane dane.
 	 */
 	tgtif = NULL;
 	for (i = 0; i < HUB_IFACES; i++) {
 		if (hub->iface[i] == iface)
 			/*
-			 * Pomijamy interfejs, z którego przysz³y dane.
+			 * Pomijamy interfejs, z ktÃ³rego przyszÂ³y dane.
 			 */
 			continue;
 		tgtif = hub->iface[i];
 		if (!iface_flag_has(tgtif, IFACE_FLAG_HASCONN))
 			/*
-			 * Interfejs musi mieæ istniej±ce po³±czenie,
-			 * tak, by po zduplikowaniu pakietów i próbie
-			 * wypchniêcia ich innym portem, istnia³o co¶,
+			 * Interfejs musi mieÃ¦ istniejÂ±ce poÂ³Â±czenie,
+			 * tak, by po zduplikowaniu pakietÃ³w i prÃ³bie
+			 * wypchniÃªcia ich innym portem, istniaÂ³o coÂ¶,
 			 * co je potem odbierze.
 			 */
 			continue;
@@ -375,16 +375,16 @@ hub_rx_process(struct hub *hub)
 		if (hub->mode == HUB_MODE_NORMAL) {
 			/* 
 			 * Hub po prostu gromadzi interfejsy do
-			 * pó¼niejszego rozg³oszenia.
+			 * pÃ³Â¼niejszego rozgÂ³oszenia.
 			 */
 			outifs[outif_idx] = tgtif;
 			outif_idx++;
 		} else if (hub->mode == HUB_MODE_SWITCH) {
 			/*
-			 * Sprawd¼, czy zdalny interfejs jest tym, do którego
-			 * adresowana jest ramka. Je¿eli tak, to od³ó¿
-			 * nasz interfejs jako ten do pó¼niejszej
-			 * obs³ugi.
+			 * SprawdÂ¼, czy zdalny interfejs jest tym, do ktÃ³rego
+			 * adresowana jest ramka. JeÂ¿eli tak, to odÂ³Ã³Â¿
+			 * nasz interfejs jako ten do pÃ³Â¼niejszej
+			 * obsÂ³ugi.
 			 */
 			match_ether =
 			    (memcmp(icmp->e.dst_mac,
@@ -398,28 +398,28 @@ hub_rx_process(struct hub *hub)
 	}
 
 	/*
-	 * Sprawd¼, czy aby nasza infrastruktura dzia³a poprawnie.
-	 * Niemo¿liwe powinno byæ posiadanie wiêcej ni¿ jednego
-	 * potencjalnego interfejsu w switchu, do którego mo¿naby wys³aæ
-	 * dane. Switch powinien mieæ conajwy¿ej jeden taki interfejs.
+	 * SprawdÂ¼, czy aby nasza infrastruktura dziaÂ³a poprawnie.
+	 * NiemoÂ¿liwe powinno byÃ¦ posiadanie wiÃªcej niÂ¿ jednego
+	 * potencjalnego interfejsu w switchu, do ktÃ³rego moÂ¿naby wysÂ³aÃ¦
+	 * dane. Switch powinien mieÃ¦ conajwyÂ¿ej jeden taki interfejs.
 	 */
 	if (hub->mode == HUB_MODE_SWITCH)
 		ASSERT(outif_idx <= 1);
 
 	/*
-	 * Mo¿e siê okazaæ, ¿e istnieje tylko po³±czenie host->hub (bez
+	 * MoÂ¿e siÃª okazaÃ¦, Â¿e istnieje tylko poÂ³Â±czenie host->hub (bez
 	 * drugiego hosta). Wtedy nie dojdzie do niepotrzebnej
-	 * duplikacji pakietów (bo za³ó¿my outif_idx = 0), jednak te¿ nic nie
-	 * zostanie wys³ane.
+	 * duplikacji pakietÃ³w (bo zaÂ³Ã³Â¿my outif_idx = 0), jednak teÂ¿ nic nie
+	 * zostanie wysÂ³ane.
 	 */
 	if (outif_idx <= 0)
 		return (-1);
 
 	for (i = 0; i < outif_idx; i++) {
 		/*
-		 * Hm. interesuj±ce.
-		 * Jak zdejmê pakiet z jednego interfejsu przy
-		 * po³±czeniu i wepchnê.. Nie mogê zrobiæ tutaj destroy
+		 * Hm. interesujÂ±ce.
+		 * Jak zdejmÃª pakiet z jednego interfejsu przy
+		 * poÂ³Â±czeniu i wepchnÃª.. Nie mogÃª zrobiÃ¦ tutaj destroy
 		 * w kazdym razie.
 		 */
 		tgtif = outifs[i];
@@ -429,7 +429,7 @@ hub_rx_process(struct hub *hub)
 		pkt2 = pkt_dup(pkt);
 		PKT_ASSERT(pkt2);
 		pktq_enqueue(&tgtif->outq, pkt2);
-		msg_log("\t\tDane z portu '%d' zostaj± zduplikowane (ID=%d) i przekazane na port '%d'",
+		msg_log("\t\tDane z portu '%d' zostajÂ± zduplikowane (ID=%d) i przekazane na port '%d'",
 		    nid_id_get(iface->nid),
 		    pkt2->id,
 		    nid_id_get(tgtif->nid)
@@ -441,7 +441,7 @@ hub_rx_process(struct hub *hub)
 
 /*
  * Akceptor hosta. Tutaj dokonujemy testu, czy MAC/IP pasuje do tego,
- * które jest w interfejsie sieciowym hosta.
+ * ktÃ³re jest w interfejsie sieciowym hosta.
  */
 int
 host_allow(struct iface *iface, struct pkt *pkt)
@@ -451,7 +451,7 @@ host_allow(struct iface *iface, struct pkt *pkt)
 	int permit_eth;
 	int permit_ip;
 
-	/* Sprawd¼, czy interfejs jest ok */
+	/* SprawdÂ¼, czy interfejs jest ok */
 	IFACE_ASSERT(iface);
 	host = iface->nid_owner->obj;
 	HOST_ASSERT(host);
@@ -459,31 +459,31 @@ host_allow(struct iface *iface, struct pkt *pkt)
 	icmp = pkt->data;
 
 	/*
-	 * Test zgodno¶ci warstwy drugiej. Tego dokonywa³a by karta
-	 * sieciowa wpiêta w komputer po odpowiedniej konfiguracji.
+	 * Test zgodnoÂ¶ci warstwy drugiej. Tego dokonywaÂ³a by karta
+	 * sieciowa wpiÃªta w komputer po odpowiedniej konfiguracji.
 	 */
 	permit_eth = (memcmp(icmp->e.dst_mac, iface->mac,
 		sizeof(icmp->e.dst_mac)) == 0);
 
 	/*
-	 * Test zgodno¶ci warstwy transportowej.
+	 * Test zgodnoÂ¶ci warstwy transportowej.
 	 */
 	permit_ip = (memcmp(icmp->ip.dst_ipv4, iface->ipv4,
 		sizeof(icmp->ip.dst_ipv4)) == 0);
 
 	/*
-	 * Zaloguj, to co nast±pi³o.
+	 * Zaloguj, to co nastÂ±piÂ³o.
 	 */
 	if (!permit_eth || !permit_ip)
 		msg_log("Host: %s", nid_name_get(host->nid));
 	if (!permit_eth) {
-		msg_log("\tPakiet ID = %d nie bêdzie zaakceptowany "
-		    "przez host %s z powodu braku zgodno¶ci adresów "
+		msg_log("\tPakiet ID = %d nie bÃªdzie zaakceptowany "
+		    "przez host %s z powodu braku zgodnoÂ¶ci adresÃ³w "
 		    "MAC", pkt->id, nid_name_get(host->nid));
 	}
 	if (!permit_ip) {
-		msg_log("\tPakiet ID = %d nie bêdzie zaakceptowany "
-		    "przez host %s z powodu braku zgodno¶ci adresów "
+		msg_log("\tPakiet ID = %d nie bÃªdzie zaakceptowany "
+		    "przez host %s z powodu braku zgodnoÂ¶ci adresÃ³w "
 		    "IP", pkt->id, nid_name_get(host->nid));
 	}
 
@@ -491,7 +491,7 @@ host_allow(struct iface *iface, struct pkt *pkt)
 }
 
 /*
- * Odbierz pakiet w kontek¶cie hosta.
+ * Odbierz pakiet w kontekÂ¶cie hosta.
  */
 int
 host_rx(struct iface *iface, struct pkt *pkt)
@@ -530,7 +530,7 @@ host_tx(struct iface *iface)
 	HOST_ASSERT(host);
 
 	pkt = pktq_dequeue(&iface->outq);
-	ASSERT(pkt != NULL && ("Pakiet nie mo¿e byæ pusty w tym miejscu"));
+	ASSERT(pkt != NULL && ("Pakiet nie moÂ¿e byÃ¦ pusty w tym miejscu"));
 	msg_log("Host %s:", nid_name_get(host->nid));
 	msg_log("\tTransmituje jeden pakiet z ID = %d do ``%s'' o nazwie ``%s''", pkt->id,
 	    nid_type_desc(iface->conn_ifp->nid_owner),
@@ -542,12 +542,12 @@ host_tx(struct iface *iface)
 
 /*
  * Przetwarzanie danych odebranych przez host. Ta funkcja jest swojego
- * rodzaju emulacj± stosu TCP/IP hosta; dlatego te¿ powinna ulec ona
+ * rodzaju emulacjÂ± stosu TCP/IP hosta; dlatego teÂ¿ powinna ulec ona
  * znacznemu rozbudowaniu w celu symulacji rzeczy o wiele bardziej
- * z³o¿onych ni¿ ICMP.
+ * zÂ³oÂ¿onych niÂ¿ ICMP.
  *
- * WKPM: host_rx_process powinien staæ siê raczej generaln± funkcj± do
- * obs³ugi jednostek, które maj± stos TCP/IP (routery);
+ * WKPM: host_rx_process powinien staÃ¦ siÃª raczej generalnÂ± funkcjÂ± do
+ * obsÂ³ugi jednostek, ktÃ³re majÂ± stos TCP/IP (routery);
  */
 int
 host_rx_process(struct host *host)
@@ -562,11 +562,11 @@ host_rx_process(struct host *host)
 	outq = &host->iface[0]->outq;
 
 	/*
-	 * Pobierz dane, je¿eli jakie¶ s± i spraw, ¿e patrzymy na nie
-	 * ju¿ jako ruch ``ping''opodobny.
+	 * Pobierz dane, jeÂ¿eli jakieÂ¶ sÂ± i spraw, Â¿e patrzymy na nie
+	 * juÂ¿ jako ruch ``ping''opodobny.
 	 *
-	 * WKPM: Je¿eli bêdziemy chcieli dodaæ co¶ prócz PING'a, ta
-	 * czê¶æ ulegnie zmianie.
+	 * WKPM: JeÂ¿eli bÃªdziemy chcieli dodaÃ¦ coÂ¶ prÃ³cz PING'a, ta
+	 * czÃªÂ¶Ã¦ ulegnie zmianie.
 	 */
 	if (pktq_empty(inq))
 		return (0);
@@ -574,24 +574,24 @@ host_rx_process(struct host *host)
 	PKT_ASSERT(pkt);
 	icmp = pkt->data;
 
-	msg_log("\t\tOdebrane dane ulegaj± przetwarzaniu.");
+	msg_log("\t\tOdebrane dane ulegajÂ± przetwarzaniu.");
 
 	/*
-	 * Przygotuj siê do odpowiedzi na pro¶bê o ``ping''.
+	 * Przygotuj siÃª do odpowiedzi na proÂ¶bÃª o ``ping''.
 	 */
 	if (icmp->ic.type == ICMP_PING_REQUEST) {
 		/*
-		 * ¬ród³o i cel pakietu, który do nas dotar³ zostaj±
-		 * zapamiêtane, dziêki czemu nie musimy wyszukiwaæ w
-		 * globalnej bazie danych parametrów interfejsów hostów.
+		 * Â¬rÃ³dÂ³o i cel pakietu, ktÃ³ry do nas dotarÂ³ zostajÂ±
+		 * zapamiÃªtane, dziÃªki czemu nie musimy wyszukiwaÃ¦ w
+		 * globalnej bazie danych parametrÃ³w interfejsÃ³w hostÃ³w.
 		 */
 		si = pkt->src_ifp;
 		di = pkt->dst_ifp;
 
 		/*
-		 * Tworzê nowy pakiet i poniewa¿ to odpowied¼, to
-		 * odwracam kolejno¶æ argumentów ¼ród³o/cel do
-		 * pkt_init() tak, by nag³ówek ramki zosta³ poprawnie
+		 * TworzÃª nowy pakiet i poniewaÂ¿ to odpowiedÂ¼, to
+		 * odwracam kolejnoÂ¶Ã¦ argumentÃ³w Â¼rÃ³dÂ³o/cel do
+		 * pkt_init() tak, by nagÂ³Ã³wek ramki zostaÂ³ poprawnie
 		 * zaadresowany.
 		 */
 		pkt_destroy(pkt);
@@ -601,23 +601,23 @@ host_rx_process(struct host *host)
 		PKT_ASSERT(pkt);
 
 		/*
-		 * I w koñcu ustaw w kolejce wyj¶ciowej
+		 * I w koÃ±cu ustaw w kolejce wyjÂ¶ciowej
 		 */
 		pktq_enqueue(outq, pkt);
 		msg_log("\t\tOdebrano pakiet PING_REQUEST;");
-		msg_log("\t\tWygenerowano odpowied¼ PING_ANSWER.");
+		msg_log("\t\tWygenerowano odpowiedÂ¼ PING_ANSWER.");
 	} else if (icmp->ic.type == ICMP_PING_ANSWER) {
 		/*
-		 * Otrzyma³em odpowied¼ na ``ping''. Po prostu usuwam
+		 * OtrzymaÂ³em odpowiedÂ¼ na ``ping''. Po prostu usuwam
 		 * pakiet z kolejki.
 		 */
 		pkt_destroy(pkt);
 		msg_log("\t\tOdebrano pakiet PING_ANSWER;");
-		msg_log("\t\tTest dostêpno¶ci hosta zakoñczony.");
+		msg_log("\t\tTest dostÃªpnoÂ¶ci hosta zakoÃ±czony.");
 	} else {
 		/*
-		 * Otrzymali¶my jaki¶ ruch, który nie jest jeszcze
-		 * sklasyfikowany przez nas. To definitywny b³±d.
+		 * OtrzymaliÂ¶my jakiÂ¶ ruch, ktÃ³ry nie jest jeszcze
+		 * sklasyfikowany przez nas. To definitywny bÂ³Â±d.
 		 */
 		fprintf(stderr, "something is very wrong; we don't seem\n"
 		    " to handle such a type of traffic.");
@@ -627,9 +627,9 @@ host_rx_process(struct host *host)
 }
 
 /*
- * Dostêpne rozdzielacze.
- * WKPM: wska¼niki na allow/rx/tx powinny byæ w struct iface.
- * Wtedy nie trzeba by³oby mieæ rozdzielacza, ale ju¿...
+ * DostÃªpne rozdzielacze.
+ * WKPM: wskaÂ¼niki na allow/rx/tx powinny byÃ¦ w struct iface.
+ * Wtedy nie trzeba byÂ³oby mieÃ¦ rozdzielacza, ale juÂ¿...
  */
 struct conn_dispatcher dispatchers[] = {
 	[NID_HOST] = {
@@ -652,7 +652,7 @@ struct conn_dispatcher dispatchers[] = {
 };
 
 /*
- * Poka¿ listê komend (debugging)
+ * PokaÂ¿ listÃª komend (debugging)
  */
 void
 cmdlist_show_fp(struct cmdlist *cmdlist, FILE *output)
@@ -671,7 +671,7 @@ cmdlist_show(struct cmdlist *cmdlist)
 }
 
 /*
- * Obs³u¿ liniê wej¶ciow± i zwróæ listê komend.
+ * ObsÂ³uÂ¿ liniÃª wejÂ¶ciowÂ± i zwrÃ³Ã¦ listÃª komend.
  */
 int
 cmd_parse(struct cmdlist **cmdlist, int *cmd_num, const char *cmdstring)
@@ -715,17 +715,17 @@ cmd_parse(struct cmdlist **cmdlist, int *cmd_num, const char *cmdstring)
 }
 
 /*
- * We¼ pierwsz± komendê je¿eli to ta, o któr± nam chodzi.
+ * WeÂ¼ pierwszÂ± komendÃª jeÂ¿eli to ta, o ktÃ³rÂ± nam chodzi.
  */
 int
 cmd_remove_if_match(struct cmdlist *l, const char *match)
 {
 	struct cmd *cmd_thing = NULL;
 	
-	ASSERT(l != NULL && "l nie mo¿e byæ tutaj NULL");
+	ASSERT(l != NULL && "l nie moÂ¿e byÃ¦ tutaj NULL");
 
 	cmd_thing = TAILQ_FIRST(l);
-	ASSERT(cmd_thing != NULL && "lista musi mieæ choæby 1 element");
+	ASSERT(cmd_thing != NULL && "lista musi mieÃ¦ choÃ¦by 1 element");
 	if (strcmp(cmd_thing->name, match) == 0) {
 		TAILQ_REMOVE(l, cmd_thing, next);
 		/* free mem */
@@ -736,7 +736,7 @@ cmd_remove_if_match(struct cmdlist *l, const char *match)
 }
 
 /*
- * We¼ pierwsz± komendê.
+ * WeÂ¼ pierwszÂ± komendÃª.
  */
 struct cmd *
 cmdlist_first(struct cmdlist *l)
@@ -752,7 +752,7 @@ cmdlist_first(struct cmdlist *l)
 }
 
 /*
- * Zwróæ warto¶æ komendy.
+ * ZwrÃ³Ã¦ wartoÂ¶Ã¦ komendy.
  */
 char *
 cmd_val(struct cmd *c)
@@ -764,7 +764,7 @@ cmd_val(struct cmd *c)
 }
 
 /*
- * Rozdziel komendy symulatora bazuj±c na ich nazwach.
+ * Rozdziel komendy symulatora bazujÂ±c na ich nazwach.
  */
 int
 cmd_dispatch(struct network *n, struct cmdlist *l)
@@ -793,18 +793,18 @@ cmd_dispatch(struct network *n, struct cmdlist *l)
 	}
 	else if (cmd_remove_if_match(l, "graph")) {
 		/*
-		 * Wykorzystywane przez graficzny interfejs u¿ytkownika.
-		 * Po dodaniu logicznego opisu sieci, GUI mo¿e
-		 * potrzebowaæ informacji, gdzie fizycznie (na ekranie)
-		 * znajduje siê hostA. Mo¿e wykorzystaæ do tego celu
-		 * linie zaczynaj±ce siê od "graph", które przez sam
-		 * symulator s± pomijane. Umo¿liwi to równie¿
-		 * wspó³pracê wielu graficznych nak³adek.
+		 * Wykorzystywane przez graficzny interfejs uÂ¿ytkownika.
+		 * Po dodaniu logicznego opisu sieci, GUI moÂ¿e
+		 * potrzebowaÃ¦ informacji, gdzie fizycznie (na ekranie)
+		 * znajduje siÃª hostA. MoÂ¿e wykorzystaÃ¦ do tego celu
+		 * linie zaczynajÂ±ce siÃª od "graph", ktÃ³re przez sam
+		 * symulator sÂ± pomijane. UmoÂ¿liwi to rÃ³wnieÂ¿
+		 * wspÃ³Â³pracÃª wielu graficznych nakÂ³adek.
 		 */
 	} else {
 		/* change the "first" to some macro */
 		return (network_err(n, "Problem in specification file, line:"
-		    " %d\nNieznane s³owo kluczowe '%s'.\n", n->lineno,
+		    " %d\nNieznane sÂ³owo kluczowe '%s'.\n", n->lineno,
 		    (TAILQ_FIRST(l))->name));
 	}
 
@@ -812,7 +812,7 @@ cmd_dispatch(struct network *n, struct cmdlist *l)
 }
 
 /*
- * Znajd¼ interfejs na bazie jego IP.
+ * ZnajdÂ¼ interfejs na bazie jego IP.
  */
 struct iface *
 iface_find_by_ip(struct network *n, char *ipspec)
@@ -838,7 +838,7 @@ iface_find_by_ip(struct network *n, char *ipspec)
 }
 
 /*
- * Obs³uga komendy: host <nazwa> ping <adresip>
+ * ObsÂ³uga komendy: host <nazwa> ping <adresip>
  */
 int
 cmd_dispatch_host_ping(struct network *n, const char *host_name, struct cmdlist *l)
@@ -855,7 +855,7 @@ cmd_dispatch_host_ping(struct network *n, const char *host_name, struct cmdlist 
 	ASSERT(host_name != NULL);
 
 	/*
-	 * Pobierz argument komendy ``ping''. Na razie zak³adamy, ¿e to
+	 * Pobierz argument komendy ``ping''. Na razie zakÂ³adamy, Â¿e to
 	 * jest adres IP.
 	 */
 	tgt = cmdlist_first(l);
@@ -864,7 +864,7 @@ cmd_dispatch_host_ping(struct network *n, const char *host_name, struct cmdlist 
 	tgts = cmd_val(tgt);
 
 	/* 
-	 * Zdalny interfejs, do którego docelowo maj± trafiæ pakiety
+	 * Zdalny interfejs, do ktÃ³rego docelowo majÂ± trafiÃ¦ pakiety
 	 * Nie wrzucamy do niego od razu danych, a tylko pobieramy adres
 	 * MAC/IP.
 	 */
@@ -875,13 +875,13 @@ cmd_dispatch_host_ping(struct network *n, const char *host_name, struct cmdlist 
 	IFACE_ASSERT(dst_ifp);
 
 	/* 
-	 * XXX: dsp_ifp tutaj CHYBA mog³oby wskazywaæ na pusty
-	 * interfejs, tak ¿eby host móg³ próbowaæ wys³aæ PINGa na
-	 * nieistniej±cy interfejs.
+	 * XXX: dsp_ifp tutaj CHYBA mogÂ³oby wskazywaÃ¦ na pusty
+	 * interfejs, tak Â¿eby host mÃ³gÂ³ prÃ³bowaÃ¦ wysÂ³aÃ¦ PINGa na
+	 * nieistniejÂ±cy interfejs.
 	 */
 
 	/*
-	 * Lokalny interfejs hosta, z którego wysy³amy
+	 * Lokalny interfejs hosta, z ktÃ³rego wysyÂ³amy
 	 */
 	nid = nid_lookup(&n->nids, host_name, 0, NID_IFACE);
 	if (nid == NULL)
@@ -890,16 +890,16 @@ cmd_dispatch_host_ping(struct network *n, const char *host_name, struct cmdlist 
 	IFACE_ASSERT(src_ifp);
 
 	/*
-	 * Pakujemy dane w pakiet bêd±cy w stanie pomie¶ciæ zarówno
-	 * nag³ówek Ethernet jak i IP oraz ICMP.
+	 * Pakujemy dane w pakiet bÃªdÂ±cy w stanie pomieÂ¶ciÃ¦ zarÃ³wno
+	 * nagÂ³Ã³wek Ethernet jak i IP oraz ICMP.
 	 */
 	pkt = pkt_create(1000 /*ETH_LEN + IP_LEN + ICMP_LEN */);
 	pkt_init(pkt, ICMP_PING_REQUEST, src_ifp, dst_ifp);
 
 	/*
-	 * Maj±c pakiet wype³niony ¼ród³owym+docelowym adresem IP oraz 
-	 * ¼ród³owym+docelowym adresem MAC, pakiet umieszczamy w kolejce
-	 * hosta ¼ród³owego -- czyli staje siê gotowy do wys³ania.
+	 * MajÂ±c pakiet wypeÂ³niony Â¼rÃ³dÂ³owym+docelowym adresem IP oraz 
+	 * Â¼rÃ³dÂ³owym+docelowym adresem MAC, pakiet umieszczamy w kolejce
+	 * hosta Â¼rÃ³dÂ³owego -- czyli staje siÃª gotowy do wysÂ³ania.
 	 */
 	PKT_ASSERT(pkt);
 	pktq_enqueue(&src_ifp->outq, pkt);
@@ -908,7 +908,7 @@ cmd_dispatch_host_ping(struct network *n, const char *host_name, struct cmdlist 
 }
 
 /*
- * Obs³uga:
+ * ObsÂ³uga:
  *	host <nazwa> create
  *	host <nazwa> remove
  *	host <nazwa> ping ...
@@ -947,7 +947,7 @@ cmd_dispatch_host(struct network *n, struct cmdlist *l)
 }
 
 /*
- * Obs³uga:
+ * ObsÂ³uga:
  * 	hub <nazwa> create
  * 	hub <nazwa> remove
  *
@@ -987,7 +987,7 @@ cmd_dispatch_hub(struct network *n, struct cmdlist *l, hub_mode_t mode)
 }
 
 /*
- * Obs³uga:
+ * ObsÂ³uga:
  * 	router <nazwa> create
  * 	router <nazwa> remove
  * 	router <nazwa> route ...
@@ -1038,7 +1038,7 @@ cmd_dispatch_router_route(struct network *n, const char *rname, struct cmdlist *
 }
 
 /*
- * Alokacja po³aczenia.
+ * Alokacja poÂ³aczenia.
  */
 struct conn *
 conn_alloc(void)
@@ -1056,7 +1056,7 @@ conn_alloc(void)
 }
 
 /*
- * Zniszczenie po³±czenia.
+ * Zniszczenie poÂ³Â±czenia.
  */
 void
 conn_destroy(struct conn *conn)
@@ -1074,7 +1074,7 @@ conn_destroy(struct conn *conn)
 }
 
 /*
- * Rejestracja po³±czenia w sieci.
+ * Rejestracja poÂ³Â±czenia w sieci.
  */
 void
 conn_register(struct connlist *connlist, struct conn *conn)
@@ -1086,7 +1086,7 @@ conn_register(struct connlist *connlist, struct conn *conn)
 }
 
 /*
- * Czy interfejs nale¿y do huba?
+ * Czy interfejs naleÂ¿y do huba?
  */
 int
 iface_of_hub(struct iface *ifp)
@@ -1096,7 +1096,7 @@ iface_of_hub(struct iface *ifp)
 }
 
 /*
- * Czy interfejs nale¿y do hosta?
+ * Czy interfejs naleÂ¿y do hosta?
  */
 int
 iface_of_host(struct iface *ifp)
@@ -1127,8 +1127,8 @@ iface_is_active(struct iface *ifp)
 }
 
 /*
- * Stwórz po³±czenie miêdzy dwoma interfejsami -- ka¿dy z 2 przekazanych 
- * tutaj "network identifiers" (identyfikatorów) musi nie¶æ za sob±
+ * StwÃ³rz poÂ³Â±czenie miÃªdzy dwoma interfejsami -- kaÂ¿dy z 2 przekazanych 
+ * tutaj "network identifiers" (identyfikatorÃ³w) musi nieÂ¶Ã¦ za sobÂ±
  * interfejs.
  */
 struct conn *
@@ -1155,7 +1155,7 @@ conn_create(struct nid *nid0, struct nid *nid1)
 		return (NULL);
 	}
 
-	/* Zaznacza, ¿e odt±d mamy po³±czenie. */
+	/* Zaznacza, Â¿e odtÂ±d mamy poÂ³Â±czenie. */
 	iface_flag_set(i0, IFACE_FLAG_HASCONN);
 	i0->conn_ifp = i1;
 	iface_flag_set(i1, IFACE_FLAG_HASCONN);
@@ -1171,8 +1171,8 @@ conn_create(struct nid *nid0, struct nid *nid1)
 }
 
 /*
- * Zwróc opis po³±czenia.
- * WKPM: Uzupe³niæ...
+ * ZwrÃ³c opis poÂ³Â±czenia.
+ * WKPM: UzupeÂ³niÃ¦...
  */
 void
 conn_debug(struct conn *conn, FILE *fp)
@@ -1186,7 +1186,7 @@ conn_debug(struct conn *conn, FILE *fp)
 }
 
 /*
- * Obs³uga:
+ * ObsÂ³uga:
  * 	connect <NAZWA> <NUMER> <NAZWA2> <NUMER2>
  *
  */
@@ -1244,7 +1244,7 @@ cmd_dispatch_connect(struct network *n, struct cmdlist *l)
 }
 
 /*
- * Obs³uga:
+ * ObsÂ³uga:
  * 	version <WERSJA>
  */
 int
@@ -1266,7 +1266,7 @@ cmd_dispatch_version(struct network *n, struct cmdlist *l)
 }
 
 /*
- * Obs³uga:
+ * ObsÂ³uga:
  * 	set <param> <val>
  */
 int
@@ -1308,7 +1308,7 @@ ethernet_mac_valid(unsigned int mac[ETHER_MAC_LEN])
 }
 
 /*
- * Konwersja z "%x:%x:%x:%x:%x:%x" do postaci 6 bajtów.
+ * Konwersja z "%x:%x:%x:%x:%x:%x" do postaci 6 bajtÃ³w.
  */
 int
 string_to_ethernet(const char *s, unsigned int mac[ETHER_MAC_LEN])
@@ -1330,7 +1330,7 @@ string_to_ethernet(const char *s, unsigned int mac[ETHER_MAC_LEN])
 }
 
 /*
- * Konwersja adresu wersji 4 (maski/IP) do postaci 4 bajtów.
+ * Konwersja adresu wersji 4 (maski/IP) do postaci 4 bajtÃ³w.
  */
 int
 string_to_addrv4(const char *s, unsigned int ip[ADDRV4_LEN])
@@ -1351,7 +1351,7 @@ string_to_addrv4(const char *s, unsigned int ip[ADDRV4_LEN])
 }
 
 /*
- * Czy 2 adresy s± sobie równe?
+ * Czy 2 adresy sÂ± sobie rÃ³wne?
  */
 int
 addrv4_eq(unsigned int a0[ADDRV4_LEN], unsigned int a1[ADDRV4_LEN])
@@ -1377,7 +1377,7 @@ ipv4_valid(unsigned int addr[ADDRV4_LEN])
 }
 
 /*
- * Konwesja adresu IP do postaci 4 bajtów i sprawdzenie poprawno¶ci.
+ * Konwesja adresu IP do postaci 4 bajtÃ³w i sprawdzenie poprawnoÂ¶ci.
  */
 int
 string_to_ipv4(const char *s, unsigned int ip[ADDRV4_LEN])
@@ -1392,7 +1392,7 @@ string_to_ipv4(const char *s, unsigned int ip[ADDRV4_LEN])
 
 /*
  * Czy maska jest poprawna.
- * WKPM: Uzupe³niæ z funkcjami dostêpnymi na dole.
+ * WKPM: UzupeÂ³niÃ¦ z funkcjami dostÃªpnymi na dole.
  */
 int
 nmv4_valid(unsigned int addr[ADDRV4_LEN])
@@ -1402,7 +1402,7 @@ nmv4_valid(unsigned int addr[ADDRV4_LEN])
 }
 
 /*
- * Skonwertuj maskê do postaci 4 bajtów i sprawd¼ jej poprawno¶æ.
+ * Skonwertuj maskÃª do postaci 4 bajtÃ³w i sprawdÂ¼ jej poprawnoÂ¶Ã¦.
  */
 int
 string_to_nmv4(const char *s, unsigned int nm[ADDRV4_LEN])
@@ -1416,7 +1416,7 @@ string_to_nmv4(const char *s, unsigned int nm[ADDRV4_LEN])
 }
 
 /*
- * Obs³uga:
+ * ObsÂ³uga:
  * 	iface <NAZWA> <NUMER> ip <ADRES_IP>
  * 	iface <NAZWA> <NUMER> netmask <ADRES_IP>
  * 	iface <NAZWA> <NUMER> mac <ADRES_MAC>
@@ -1476,7 +1476,7 @@ cmd_dispatch_iface(struct network *n, struct cmdlist *l)
 }
 
 /*
- * Ustaw flagê flag.
+ * Ustaw flagÃª flag.
  */
 void
 iface_flag_set(struct iface *iface, int flag)
@@ -1487,7 +1487,7 @@ iface_flag_set(struct iface *iface, int flag)
 }
 
 /*
- * Wyczy¶æ flagê flag.
+ * WyczyÂ¶Ã¦ flagÃª flag.
  */
 void
 iface_flag_clear(struct iface *iface, int flag)
@@ -1498,7 +1498,7 @@ iface_flag_clear(struct iface *iface, int flag)
 }
 
 /*
- * Czy interfejs ma flagê flag
+ * Czy interfejs ma flagÃª flag
  */
 int
 iface_flag_has(struct iface *iface, int flag)
@@ -1555,7 +1555,7 @@ network_iface_ipv4_set(struct network *n, struct iface *ifp, const char *addrv4_
 }
 
 /*
- * Ustaw maskê sieciow± dla interfejsu.
+ * Ustaw maskÃª sieciowÂ± dla interfejsu.
  */
 int
 network_iface_nmv4_set(struct network *n, struct iface *ifp, const char *addrv4_spec)
@@ -1596,7 +1596,7 @@ host_alloc(void)
 }
 
 /*
- * Stwórz host i pod³±cz go do sieci.
+ * StwÃ³rz host i podÂ³Â±cz go do sieci.
  */
 int
 host_create(struct network *n, const char *host_name)
@@ -1656,7 +1656,7 @@ host_destroy(struct network *n, struct host *host)
 }
 
 /*
- * Usuñ host z sieci.
+ * UsuÃ± host z sieci.
  */
 int
 host_remove(struct network *n, const char *host_name)
@@ -1772,7 +1772,7 @@ hub_destroy(struct network *n, struct hub *h)
 }
 
 /*
- * Stworzenie huba i pod³±czenie go do sieci.
+ * Stworzenie huba i podÂ³Â±czenie go do sieci.
  */
 int
 hub_create(struct network *n, const char *hub_name, hub_mode_t mode)
@@ -1814,7 +1814,7 @@ hub_create(struct network *n, const char *hub_name, hub_mode_t mode)
 }
 
 /*
- * Usuniêcie huba z sieci i jego zniszczenie.
+ * UsuniÃªcie huba z sieci i jego zniszczenie.
  */
 int
 hub_remove(struct network *n, const char *hub_name)
@@ -1850,7 +1850,7 @@ hub_remove(struct network *n, const char *hub_name)
 }
 
 /*
- * Stwórz pakiet.
+ * StwÃ³rz pakiet.
  */
 struct pkt *
 pkt_create(int len)
@@ -1886,8 +1886,8 @@ pkt_destroy(struct pkt *pkt)
 }
 
 /*
- * Ta funkcja replikuje równie¿ wska¼niki na interfejsy, które znajduj±
- * siê w strukturze pakietu.
+ * Ta funkcja replikuje rÃ³wnieÂ¿ wskaÂ¼niki na interfejsy, ktÃ³re znajdujÂ±
+ * siÃª w strukturze pakietu.
  */
 struct pkt *
 pkt_dup(struct pkt *pkt)
@@ -1922,7 +1922,7 @@ arptable_destroy(struct arptable *at)
 }
 
 /*
- * Pobierz miejsca w pakiecie, w których mamy interesuj±ce nas dane.
+ * Pobierz miejsca w pakiecie, w ktÃ³rych mamy interesujÂ±ce nas dane.
  * WKPM: ICMP!
  */
 void
@@ -2036,7 +2036,7 @@ pkt_debug(struct pkt *pkt, FILE *fp)
 }
 
 /*
- * Inicjalizuj kolejkê pktq.
+ * Inicjalizuj kolejkÃª pktq.
  */
 void
 pktq_init(struct pktq *pktq)
@@ -2046,7 +2046,7 @@ pktq_init(struct pktq *pktq)
 }
 
 /*
- * Zniszcz kolejkê pktq.
+ * Zniszcz kolejkÃª pktq.
  */
 void
 pktq_destroy(struct pktq *pktq)
@@ -2087,7 +2087,7 @@ pktq_enqueue(struct pktq *pktq, struct pkt *pkt)
 }
 
 /*
- * Kandydat do usuniêcia.
+ * Kandydat do usuniÃªcia.
  */
 struct pkt *
 pktq_dequeue_candidate(struct pktq *pktq)
@@ -2097,7 +2097,7 @@ pktq_dequeue_candidate(struct pktq *pktq)
 }
 
 /*
- * Usuniêcie pakietu z kolejki.
+ * UsuniÃªcie pakietu z kolejki.
  */
 void
 pktq_remove(struct pktq *pktq, struct pkt *pkt)
@@ -2193,7 +2193,7 @@ iface_destroy(struct network *n, struct iface *iface)
 }
 
 /*
- * Ustawienie w³a¶ciciela interfejsu.
+ * Ustawienie wÂ³aÂ¶ciciela interfejsu.
  */
 void
 iface_owner_set(struct iface *ifp, struct nid *nid)
@@ -2261,7 +2261,7 @@ iface_debug(struct iface *ifp, FILE *fp)
 }
 
 /*
- * Inicjalizacja listy po³±czeñ.
+ * Inicjalizacja listy poÂ³Â±czeÃ±.
  */
 static int
 connlist_init(struct connlist *cl)
@@ -2272,7 +2272,7 @@ connlist_init(struct connlist *cl)
 }
 
 /*
- * Zniszczenie listy po³±czeñ.
+ * Zniszczenie listy poÂ³Â±czeÃ±.
  */
 static int
 connlist_destroy(struct connlist *cl)
@@ -2282,7 +2282,7 @@ connlist_destroy(struct connlist *cl)
 }
 
 /*
- * Generalna inicjalizacja siatki, z której bêdziemy budowaæ sieæ.
+ * Generalna inicjalizacja siatki, z ktÃ³rej bÃªdziemy budowaÃ¦ sieÃ¦.
  */
 static int
 network_init(struct network *n, const char *fname)
@@ -2316,7 +2316,7 @@ network_init(struct network *n, const char *fname)
 }
 
 /*
- * Zniszczenie wszystkich, wcze¶niej zaalokowanych struktur.
+ * Zniszczenie wszystkich, wczeÂ¶niej zaalokowanych struktur.
  */
 static int
 network_destroy(struct network *n)
@@ -2383,8 +2383,8 @@ network_parse(struct network *n)
 }
 
 /*
- * Wykonanie jednej czê¶ci po³±czenie -- przes³anie danych w jedn±
- * stronê.
+ * Wykonanie jednej czÃªÂ¶ci poÂ³Â±czenie -- przesÂ³anie danych w jednÂ±
+ * stronÃª.
  */
 int
 tx_perform(struct iface *si, struct iface *ti)
@@ -2397,19 +2397,19 @@ tx_perform(struct iface *si, struct iface *ti)
 
 	/* 
 	 * WKPM:
-	 * Gdyby interfejs mia³ od razu wpisane w siebie metody do
-	 * obs³ugi, to mo¿naby sobie daæ spokój z dispatcherem.
+	 * Gdyby interfejs miaÂ³ od razu wpisane w siebie metody do
+	 * obsÂ³ugi, to moÂ¿naby sobie daÃ¦ spokÃ³j z dispatcherem.
 	 */
 
 	/*
-	 * Sprawd¼ ¼ród³owy i docelowy interfejs.
+	 * SprawdÂ¼ Â¼rÃ³dÂ³owy i docelowy interfejs.
 	 */
 	IFACE_ASSERT(si);
 	IFACE_ASSERT(ti);
 
 	/*
-	 * Odnajd¼ poprawny dispatcher dla ka¿dego obiektu,
-	 * dla którego obs³ugujemy interfejsy.
+	 * OdnajdÂ¼ poprawny dispatcher dla kaÂ¿dego obiektu,
+	 * dla ktÃ³rego obsÂ³ugujemy interfejsy.
 	 */
 	nid_type = nid_type_get(ti->nid_owner);
 	ASSERT(nid_type == NID_HUB || nid_type == NID_HOST);
@@ -2420,8 +2420,8 @@ tx_perform(struct iface *si, struct iface *ti)
 	sdisp = &dispatchers[nid_type];
 
 	/*
-	 * Sprawd¼, czy aby w interfejsie ¼ród³owym s± jakie¶ dane do
-	 * wys³ania.
+	 * SprawdÂ¼, czy aby w interfejsie Â¼rÃ³dÂ³owym sÂ± jakieÂ¶ dane do
+	 * wysÂ³ania.
 	 */
 	if (pktq_empty(&si->outq)) {
 		/*
@@ -2434,15 +2434,15 @@ tx_perform(struct iface *si, struct iface *ti)
 	}
 
 	/*
-	 * Sprawd¼, czy ewentualny pakiet do wys³ania ze ¼ród³a ma
-	 * szansê zostaæ zaakceptowanym przez drug± stronê po³±czenia.
+	 * SprawdÂ¼, czy ewentualny pakiet do wysÂ³ania ze Â¼rÃ³dÂ³a ma
+	 * szansÃª zostaÃ¦ zaakceptowanym przez drugÂ± stronÃª poÂ³Â±czenia.
 	 */
 	pkt = pktq_dequeue_candidate(&si->outq);
 	ret = tdisp->allow(ti, pkt);
 	if (!ret) {
 		/*
-		 * Niestety, pakiet nie zosta³ zaakceptowany.
-		 * XXx: Nale¿a³oby zwiêkszyæ ilo¶æ prób transmisji pakietu.
+		 * Niestety, pakiet nie zostaÂ³ zaakceptowany.
+		 * XXx: NaleÂ¿aÂ³oby zwiÃªkszyÃ¦ iloÂ¶Ã¦ prÃ³b transmisji pakietu.
 		 */
 		VERBOSE(2) {
 			DEBUG("TX disallowed");
@@ -2450,8 +2450,8 @@ tx_perform(struct iface *si, struct iface *ti)
 		return (0);
 	}
 	/*
-	 * Pakiet zosta³by zaakceptowany przez drug± stronê. Dokonajmy
-	 * wiêc tej transmisji.
+	 * Pakiet zostaÂ³by zaakceptowany przez drugÂ± stronÃª. Dokonajmy
+	 * wiÃªc tej transmisji.
 	 */
 	pkt = sdisp->tx(si);
 	PKT_ASSERT(pkt);
@@ -2468,8 +2468,8 @@ tx_perform(struct iface *si, struct iface *ti)
 }
 
 /*
- * Wykonanie kroku symulacji -- najpierw wykonujemy "pó³" po³±czenia --
- * transmisja w jedn± stronê; i potem drugie 'pó³' w drug±.
+ * Wykonanie kroku symulacji -- najpierw wykonujemy "pÃ³Â³" poÂ³Â±czenia --
+ * transmisja w jednÂ± stronÃª; i potem drugie 'pÃ³Â³' w drugÂ±.
  */
 int
 conn_start(struct conn *conn)
@@ -2488,7 +2488,7 @@ conn_start(struct conn *conn)
 }
 
 /*
- * Rozpoczynamy symulacjê.
+ * Rozpoczynamy symulacjÃª.
  */
 static int
 network_go(struct network *n)
@@ -2509,7 +2509,7 @@ network_go(struct network *n)
 }
 
 /*
- * Generacja podsumowania -- w zale¿no¶ci od przekazanych argumentów.
+ * Generacja podsumowania -- w zaleÂ¿noÂ¶ci od przekazanych argumentÃ³w.
  */
 static int
 network_summarize(struct network *n, const char *spec_file,
@@ -2706,7 +2706,7 @@ network_dump_txt(struct network *n, FILE *fp)
 }
 
 /*
- * Jak u¿ywaæ tego programu.
+ * Jak uÂ¿ywaÃ¦ tego programu.
  */
 static void
 usage(void)
@@ -2818,7 +2818,7 @@ nids_init(struct nids *nids)
 }
 
 /*
- * Usuniêcie przestrzeni nazw.
+ * UsuniÃªcie przestrzeni nazw.
  */
 void
 nids_destroy(struct nids *nids)
@@ -2885,7 +2885,7 @@ nid_create(const char *nid, int id)
 }
 
 /*
- * Wyszukanie na podstawie podanych kryteriów.
+ * Wyszukanie na podstawie podanych kryteriÃ³w.
  */
 struct nid *
 nid_lookup(struct nids *nids, const char *name, int id, int type)
@@ -3219,8 +3219,8 @@ network_errmsg_get(struct network *n)
 }
 
 /*
- * Uwzglêdniamy, ¿e jedynie ci±g³e maski s± wspierane -- czyli takie, w
- * których ci±g jedynek przykrywaj±cych czê¶æ "sieci" adresu IP nie jest
+ * UwzglÃªdniamy, Â¿e jedynie ciÂ±gÂ³e maski sÂ± wspierane -- czyli takie, w
+ * ktÃ³rych ciÂ±g jedynek przykrywajÂ±cych czÃªÂ¶Ã¦ "sieci" adresu IP nie jest
  * przerwany w pewnym miejscu.
  */
 int
@@ -3231,7 +3231,7 @@ netmask_valid(ipv4_t nm)
 	uint32_t fullnm = ~0;
 	uint32_t curnm = 0;
 
-	/* Pakujemy maskê sieci w liczbê typu int */
+	/* Pakujemy maskÃª sieci w liczbÃª typu int */
 	bitnm |= nm[0]; bitnm <<= 8;
 	bitnm |= nm[1]; bitnm <<= 8;
 	bitnm |= nm[2]; bitnm <<= 8;
@@ -3242,15 +3242,15 @@ netmask_valid(ipv4_t nm)
 	}
 
 	/* 
-	 * Sprawdzamy, czy która¶ z "normalnych masek pasuje do naszej
+	 * Sprawdzamy, czy ktÃ³raÂ¶ z "normalnych masek pasuje do naszej
 	 * maski
 	 */
 	for (i = 0; i < sizeof(fullnm) * 8; i++) {
-		/* Najpierw usuwamy jedynki, zostaj± nam zero z lewej */
+		/* Najpierw usuwamy jedynki, zostajÂ± nam zero z lewej */
 		curnm = fullnm >> i;
 
 		/* 
-		 * Potem przesuwamy ca³o¶æ jedynek i zostaj± nam zera z
+		 * Potem przesuwamy caÂ³oÂ¶Ã¦ jedynek i zostajÂ± nam zera z
 		 * prawej
 		 */
 		curnm <<= i;
@@ -3266,7 +3266,7 @@ netmask_valid(ipv4_t nm)
 
 /*
  * Test jednostkowy stworzony w celu sprawdzenia, czy netmask_valid()
- * dzia³a tak, jak siê tego spodziewam. Najpierw wrzucamy maski
+ * dziaÂ³a tak, jak siÃª tego spodziewam. Najpierw wrzucamy maski
  * poprawne:
  */
 ipv4_t valid_masks[] = {
@@ -3276,7 +3276,7 @@ ipv4_t valid_masks[] = {
 };
 
 /*
- * ..te z kolei z za³o¿enia s± niepoprawne.
+ * ..te z kolei z zaÂ³oÂ¿enia sÂ± niepoprawne.
  */
 ipv4_t invalid_masks[] = {
 	{ 255, 205,   0, 0 },
@@ -3293,7 +3293,7 @@ MAIN(main)(int argc, char **argv)
 	ipv4_t nm;
 
 	/*
-	 * Dokonujemy sprawdzeñ dla ka¿dej z maski umieszczonej w dwóch,
+	 * Dokonujemy sprawdzeÃ± dla kaÂ¿dej z maski umieszczonej w dwÃ³ch,
 	 * w.w tablicach.
 	 */
 	puts("# ---------------------");
