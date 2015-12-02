@@ -1,5 +1,5 @@
 Copyright (c) 2009-2015, Wojciech Adam Koszek <wojciech@koszek.com>
-Copyright (c) 2009 Piotr Matyja <piotr-matyja@o2.pl>
+Copyright (c) 2009 Piotr Matyja <peter.matyja@gmail.com>
 
 All rights reserved.
 
