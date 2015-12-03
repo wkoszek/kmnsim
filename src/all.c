@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2009 Wojciech Koszek <wkoszek@FreeBSD.czest.pl>
- *                       Piotr Matyja <piotr-matyja@o2.pl>
+ *                       Piotr Matyja <peter.matyja@gmail.com>
  *
  * All rights reserved.
  */
